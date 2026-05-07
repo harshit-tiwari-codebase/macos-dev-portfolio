@@ -19,3 +19,12 @@
 .icon:has(+ .icon:hover){
   transform: translateY(-15%);
 }
+
+body{
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "Helvetica Neue",
+    sans-serif;
+}
