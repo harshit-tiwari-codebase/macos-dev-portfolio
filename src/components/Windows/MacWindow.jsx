@@ -18,7 +18,7 @@ const MacWindow = () => {
         className="window  bg-zinc-900/80
                 backdrop-blur-2xl
                 border border-white/10
-                shadow-[0_20px_60px_rgba(0,0,0,0.55)] w-full h-full bg-black rounded-2xl"
+                shadow-[0_20px_60px_rgba(0,0,0,0.55)] w-full h-full  rounded-2xl"
       >
         <div
           className="nav   bg-white/5
