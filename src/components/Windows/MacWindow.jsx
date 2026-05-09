@@ -1,7 +1,7 @@
 import React from "react";
 import { Rnd } from "react-rnd";
 
-const MacWindow = () => {
+const MacWindow = ({children}) => {
   return (
     <Rnd
       default={{
@@ -32,16 +32,18 @@ const MacWindow = () => {
           </div>
           <p className="text-sm text-white">harshitOS</p>
         </div>
-        <div className='
+        <div
+          className="
   content
   w-full
   h-[calc(100%-40px)]
-  p-5
+  px-2
   text-white
   overflow-auto
   font-[-apple-system,BlinkMacSystemFont,sans-serif]
-'>
-
+"
+        >
+         {children} 
         </div>
       </div>
     </Rnd>
