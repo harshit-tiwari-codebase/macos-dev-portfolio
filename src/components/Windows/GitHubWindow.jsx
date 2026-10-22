@@ -123,7 +123,7 @@ const GitHubWindow = ({
       initialWidth={820}
       initialHeight={540}
     >
-      <div className="w-full h-full overflow-y-auto bg-[#0d1117] text-white p-5 sm:p-6">
+      <div className="w-full h-full overflow-y-auto bg-[#0d1117] text-white p-3.5 sm:p-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>

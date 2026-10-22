@@ -128,7 +128,7 @@ export default function Spotlight({ open, setOpen, items = [] }) {
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-[100] flex items-start justify-center pt-[18vh] px-4"
+          className="fixed inset-0 z-[100] flex items-start justify-center pt-[10vh] sm:pt-[18vh] px-3 sm:px-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -138,7 +138,7 @@ export default function Spotlight({ open, setOpen, items = [] }) {
           <motion.div
             role="dialog"
             aria-label="Spotlight search"
-            className="w-full max-w-xl overflow-hidden rounded-2xl border border-white/20 bg-neutral-900/70 text-white shadow-2xl backdrop-blur-2xl"
+            className="w-full max-w-xl overflow-hidden rounded-2xl border border-white/20 bg-neutral-900/80 text-white shadow-2xl backdrop-blur-2xl"
             initial={{ opacity: 0, scale: 0.96, y: -8 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.97 }}
@@ -146,8 +146,8 @@ export default function Spotlight({ open, setOpen, items = [] }) {
             onMouseDown={(e) => e.stopPropagation()}
           >
             {/* search field */}
-            <div className="flex items-center gap-3 px-4 py-3">
-              <Search size={22} className="shrink-0 text-white/60" />
+            <div className="flex items-center gap-2.5 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3">
+              <Search size={20} className="shrink-0 text-white/60" />
               <input
                 ref={inputRef}
                 value={query}
@@ -156,14 +156,14 @@ export default function Spotlight({ open, setOpen, items = [] }) {
                 placeholder="Spotlight Search"
                 spellCheck={false}
                 autoComplete="off"
-                className="w-full bg-transparent text-xl outline-none placeholder:text-white/40"
+                className="w-full bg-transparent text-base sm:text-xl outline-none placeholder:text-white/40"
               />
               <kbd className="rounded border border-white/20 px-1.5 py-0.5 text-xs text-white/50">esc</kbd>
             </div>
 
             {/* results */}
             {results.length > 0 ? (
-              <ul ref={listRef} className="max-h-80 overflow-y-auto border-t border-white/10 p-2">
+              <ul ref={listRef} className="max-h-[55vh] sm:max-h-80 overflow-y-auto border-t border-white/10 p-1.5 sm:p-2">
                 {results.map((item, i) => {
                   const Icon = item.icon || GROUP_ICON[item.group] || AppWindow;
                   const showHeader = i === 0 || results[i - 1].group !== item.group;

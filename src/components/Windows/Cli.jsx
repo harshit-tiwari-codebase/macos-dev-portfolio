@@ -163,7 +163,7 @@ Email    : Contact via Mail icon on Dock
       initialWidth={720}
       initialHeight={460}
     >
-      <div className="w-full h-full bg-[#181818]">
+      <div className="w-full h-full bg-[#181818] overflow-hidden text-xs sm:text-sm">
         <Terminal
           commands={commands}
           welcomeMessage="Welcome to Harshit Tiwari's macOS Developer Terminal. Type 'help' or 'projects' to begin."
@@ -173,6 +173,7 @@ Email    : Contact via Mail icon on Dock
             backgroundColor: "#181818",
             color: "#4ade80",
             fontFamily: "monospace",
+            fontSize: "0.82rem",
           }}
           contentStyle={{
             color: "#e2e8f0",

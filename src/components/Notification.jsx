@@ -30,7 +30,7 @@ const Notification = ({ onOpenProjects }) => {
           animate={{ opacity: 1, y: 0, x: 0, scale: 1 }}
           exit={{ opacity: 0, y: -20, scale: 0.95 }}
           transition={{ type: "spring", damping: 25, stiffness: 350 }}
-          className="fixed top-10 right-4 z-50 max-w-sm w-80 sm:w-88 rounded-2xl bg-zinc-900/90 backdrop-blur-2xl border border-white/20 p-3.5 shadow-[0_20px_50px_rgba(0,0,0,0.6)] select-none text-white font-[-apple-system,BlinkMacSystemFont,sans-serif]"
+          className="fixed top-8 sm:top-10 right-3 sm:right-4 z-50 w-[calc(100vw-24px)] max-w-sm sm:w-88 rounded-2xl bg-zinc-900/90 backdrop-blur-2xl border border-white/20 p-3 sm:p-3.5 shadow-[0_20px_50px_rgba(0,0,0,0.6)] select-none text-white font-[-apple-system,BlinkMacSystemFont,sans-serif]"
         >
           {/* Header Row */}
           <div className="flex items-center justify-between gap-2 mb-2">

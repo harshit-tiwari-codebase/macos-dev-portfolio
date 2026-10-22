@@ -41,20 +41,20 @@ const Note = ({ windowName, WindowState, setWindowState, activeWindow, setActive
       initialHeight={480}
     >
       <div className="w-full h-full flex flex-col bg-[#0d1117] text-white">
-        <div className="flex items-center justify-between px-4 py-2 bg-white/5 border-b border-white/10 text-xs text-gray-400">
+        <div className="flex items-center justify-between px-3 sm:px-4 py-2 bg-white/5 border-b border-white/10 text-xs text-gray-400">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-yellow-400"></span>
-            <span>Notes.js (Read-only)</span>
+            <span className="text-[11px] sm:text-xs">Notes.js (Read-only)</span>
           </div>
           <button
             onClick={handleCopy}
-            className="px-2.5 py-1 rounded bg-white/10 hover:bg-white/20 text-xs text-gray-200 transition"
+            className="px-2.5 py-1 rounded bg-white/10 hover:bg-white/20 text-xs text-gray-200 transition cursor-pointer"
           >
             {copied ? "Copied!" : "Copy Code"}
           </button>
         </div>
 
-        <div className="flex-1 overflow-auto text-sm p-2">
+        <div className="flex-1 overflow-auto text-xs sm:text-sm p-1 sm:p-2">
           {markdown ? (
             <SyntaxHighlighter
               language="javascript"
@@ -62,16 +62,16 @@ const Note = ({ windowName, WindowState, setWindowState, activeWindow, setActive
               customStyle={{
                 background: "transparent",
                 margin: 0,
-                padding: "1rem",
-                fontSize: "0.875rem",
-                lineHeight: "1.5",
+                padding: "0.75rem",
+                fontSize: "0.8rem",
+                lineHeight: "1.45",
               }}
               showLineNumbers
             >
               {markdown}
             </SyntaxHighlighter>
           ) : (
-            <div className="flex items-center justify-center h-full text-gray-400">
+            <div className="flex items-center justify-center h-full text-gray-400 text-xs">
               Loading note...
             </div>
           )}

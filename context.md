@@ -135,6 +135,11 @@ macos-dev-portfolio/
    - Always reference files in the `public/` folder using absolute root paths (e.g., `/doc-icons/projects.svg`, `/images/...`, `/documents/...`). Never use Windows-style backslashes or `public\...` in `img src` or `href`.
 2. **Simple Code Principle**:
    - Keep components modular and self-contained without unnecessary complex state libraries (Redux, Zustand, etc.). Standard React `useState`, `useEffect`, and props are sufficient.
-3. **Build & Test**:
+3. **Responsive Design & Mobile Handling**:
+   - `MacWindow.jsx` automatically switches to mobile-optimized viewport bounds (`x: 6, y: 32, width: calc(100vw - 12px), height: calc(100vh - 90px)`) when `window.innerWidth < 768`.
+   - `Dock.jsx` scales to `p-1.5, w-5.5 h-5.5` with horizontal scroll if needed, preserving the `:has(+ .icon:hover)` and adjacent sibling wave animation.
+   - `DesktopIcons.jsx` hides when windows are open on mobile (`hidden md:flex`) to avoid background clutter.
+   - `Navbar.jsx`, `Spotlight.jsx`, `ControlCenter.jsx`, and `Notification.jsx` are dynamically clamped within `100vw`.
+4. **Build & Test**:
    - Run `npm run dev` to start Vite local dev server.
    - Run `npm run build` to verify clean production bundles.

@@ -56,7 +56,7 @@ const ControlCenter = ({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.18, ease: "easeOut" }}
-            className="fixed top-9 right-3 z-50 w-84 sm:w-92 bg-zinc-900/90 backdrop-blur-2xl border border-white/20 rounded-2xl p-4 shadow-[0_25px_60px_rgba(0,0,0,0.7)] text-white select-none font-[-apple-system,BlinkMacSystemFont,sans-serif]"
+            className="fixed top-8 sm:top-9 right-2 sm:right-3 z-50 w-[calc(100vw-16px)] max-w-sm sm:w-92 bg-zinc-900/95 backdrop-blur-2xl border border-white/20 rounded-2xl p-3 sm:p-4 shadow-[0_25px_60px_rgba(0,0,0,0.7)] text-white select-none font-[-apple-system,BlinkMacSystemFont,sans-serif]"
           >
             {/* Top Bar */}
             <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-3">
