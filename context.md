@@ -56,6 +56,7 @@ macos-dev-portfolio/
         ├── Navbar.jsx                  # Top menu bar, Apple menu, and quick actions
         ├── Notification.jsx            # Top-right push notification banner
         ├── ControlCenter.jsx           # Wallpaper switcher & quick toggles panel
+        ├── Spotlight.jsx               # Spotlight Search modal (Cmd/Ctrl+K, fuzzy search)
         ├── Wallpaper.jsx               # Background image renderer with crossfade
         └── Windows/
             ├── MacWindow.jsx           # Reusable window shell (traffic lights, drag, maximize)
@@ -119,6 +120,12 @@ macos-dev-portfolio/
 ### F. `src/components/Notification.jsx`
 - Automatically triggers a sliding macOS notification banner 1.2s after mount.
 - Provides a one-click button to open the **All Projects** window or dismiss manually.
+
+### G. `src/components/Spotlight.jsx`
+- **macOS Spotlight Search**: Global `Cmd+K` / `Ctrl+K` hotkey and menu bar search trigger.
+- **Fuzzy Search Algorithm**: Ranks exact matches, prefix matches, word matches, and subsequence matches (`prj` -> `projects`).
+- **Dynamic Fetching**: Live-queries user's GitHub repositories on open and merges them with app and command entries under "Applications", "Commands", and "Projects" groups.
+- **Keyboard Navigation**: Up/Down arrow keys navigate list with smooth `scrollIntoView`, Enter launches or visits, Escape closes.
 
 ---
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import DateTime from "./DateTime";
-import { SlidersHorizontal, Image } from "lucide-react";
+import { SlidersHorizontal, Image, Search } from "lucide-react";
 
 const Navbar = ({
   WindowState,
@@ -8,6 +8,7 @@ const Navbar = ({
   setActiveWindow,
   controlCenterOpen,
   setControlCenterOpen,
+  setSpotlightOpen,
 }) => {
   const [appleMenuOpen, setAppleMenuOpen] = useState(false);
   const [fileMenuOpen, setFileMenuOpen] = useState(false);
@@ -62,6 +63,21 @@ const Navbar = ({
                 </button>
 
                 <div className="h-px bg-white/10 my-1" />
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (setSpotlightOpen) setSpotlightOpen(true);
+                    setAppleMenuOpen(false);
+                  }}
+                  className="w-full text-left px-3 py-1.5 hover:bg-blue-600 hover:text-white transition cursor-pointer flex items-center justify-between"
+                >
+                  <div className="flex items-center gap-2">
+                    <Search className="w-3.5 h-3.5 text-blue-400" />
+                    <span>Spotlight Search</span>
+                  </div>
+                  <span className="text-[10px] text-gray-400 font-mono">⌘K</span>
+                </button>
 
                 <button
                   type="button"
@@ -227,6 +243,20 @@ const Navbar = ({
           <div title="Wi-Fi Connected" className="opacity-90">
             <img src="/navbar-icons/wifi.svg" alt="Wi-Fi" className="w-3.5 h-3.5" />
           </div>
+
+          {/* Spotlight Search Toggle Button */}
+          <button
+            type="button"
+            onClick={() => {
+              if (setSpotlightOpen) {
+                setSpotlightOpen((prev) => !prev);
+              }
+            }}
+            className="p-1 rounded hover:bg-white/10 text-gray-200 transition cursor-pointer flex items-center justify-center"
+            title="Spotlight Search (⌘K)"
+          >
+            <Search className="w-3.5 h-3.5" />
+          </button>
 
           {/* Control Center Toggle Button */}
           <button
