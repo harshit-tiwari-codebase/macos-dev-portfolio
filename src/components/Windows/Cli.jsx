@@ -1,4 +1,3 @@
-import React from "react";
 import MacWindow from "./MacWindow";
 import TerminalPackage from "react-console-emulator";
 
@@ -12,7 +11,7 @@ const Cli = ({
   setActiveWindow,
 }) => {
   const commands = {
-    help: {
+    commands: {
       fn: () => `
 Available commands:
 • projects     - View all GitHub projects
@@ -166,7 +165,7 @@ Email    : Contact via Mail icon on Dock
       <div className="w-full h-full bg-[#181818] overflow-hidden text-xs sm:text-sm">
         <Terminal
           commands={commands}
-          welcomeMessage="Welcome to Harshit Tiwari's macOS Developer Terminal. Type 'help' or 'projects' to begin."
+          welcomeMessage="Welcome to Harshit Tiwari's macOS Developer Terminal. Type 'help', 'commands', or 'projects' to begin."
           promptLabel="harshit@devfolio:~$"
           style={{
             height: "100%",
