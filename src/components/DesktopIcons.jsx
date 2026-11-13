@@ -1,6 +1,5 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { FolderGit2 } from "lucide-react";
 import storyFolderIcon from "../../story-folder.svg";
 
 const StoryFolderIcon = () => (
@@ -18,9 +17,12 @@ const StoryFolderIcon = () => (
 );
 
 const FolderIcon = () => (
-  <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-blue-400/40 bg-blue-500/20 text-blue-400 shadow-lg backdrop-blur-md transition group-hover:scale-105 group-hover:bg-blue-500/30 sm:h-14 sm:w-14">
-    <FolderGit2 className="h-5 w-5 sm:h-6 sm:w-6" />
-  </div>
+  <img
+    src="/images/projects-folder-icon.svg"
+    alt=""
+    draggable="false"
+    className="h-11 w-11 select-none object-contain transition-transform group-hover:scale-105 sm:h-14 sm:w-14"
+  />
 );
 
 const AppIcon = ({ children, className = "bg-white/95" }) => (

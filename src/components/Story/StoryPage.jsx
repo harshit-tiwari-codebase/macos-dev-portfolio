@@ -22,6 +22,8 @@ const GITHUB_USER = "harshit-tiwari-codebase";
 const GITHUB_BASE = `https://github.com/${GITHUB_USER}`;
 const EMAIL = "harshittiwari20044@gmail.com";
 const EASE = [0.16, 1, 0.3, 1];
+const FOOTER_WORDMARK_WIDTH = 1200;
+const FOOTER_WORDMARK_HEIGHT = 300;
 
 /*
   Design tokens
@@ -393,6 +395,8 @@ export default function StoryPage({ onClose, onOpenWindow }) {
   const [activeSection, setActiveSection] = useState("story-hero");
   const [copied, setCopied] = useState(false);
   const [hoverWork, setHoverWork] = useState(null);
+  const footerGradientRef = useRef(null);
+  const [footerWordmarkActive, setFooterWordmarkActive] = useState(false);
 
   /* Fonts */
   useEffect(() => {
@@ -474,6 +478,18 @@ export default function StoryPage({ onClose, onOpenWindow }) {
     navigator.clipboard?.writeText(EMAIL);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const moveFooterGradient = (e) => {
+    const bounds = e.currentTarget.getBoundingClientRect();
+    if (!bounds.width || !bounds.height) return;
+    const x = ((e.clientX - bounds.left) / bounds.width) * FOOTER_WORDMARK_WIDTH;
+    const y = ((e.clientY - bounds.top) / bounds.height) * FOOTER_WORDMARK_HEIGHT;
+    const gradient = footerGradientRef.current;
+    if (gradient) {
+      gradient.setAttribute("cx", `${x}`);
+      gradient.setAttribute("cy", `${y}`);
+    }
   };
 
   const skills = activeCategory === "all" ? SKILLS_DATA : SKILLS_DATA.filter((s) => s.category === activeCategory);
@@ -758,7 +774,7 @@ export default function StoryPage({ onClose, onOpenWindow }) {
             </section>
 
             {/* Contact */}
-            <footer className="pb-16 pt-12">
+            <footer className="pb-8 pt-16">
               <p className="sp-display text-3xl sm:text-5xl font-semibold max-w-[20ch]">
                 I’m looking for software engineering roles.
               </p>
@@ -774,9 +790,60 @@ export default function StoryPage({ onClose, onOpenWindow }) {
                   Open the desktop version
                 </button>
               </div>
-              <p className="mt-16 text-sm text-[var(--sp-slate)]">
-                Designed and built by Harshit Tiwari, 2026. React 19, Framer Motion and GSAP.
-              </p>
+
+              <svg
+                viewBox={`0 0 ${FOOTER_WORDMARK_WIDTH} ${FOOTER_WORDMARK_HEIGHT}`}
+                className="mt-14 block h-auto w-full select-none"
+                onPointerMove={moveFooterGradient}
+                onPointerEnter={() => setFooterWordmarkActive(true)}
+                onPointerLeave={() => setFooterWordmarkActive(false)}
+                role="img"
+                aria-label="harshit.dev"
+              >
+                <defs>
+                  <radialGradient
+                    id="sp-footer-glow"
+                    ref={footerGradientRef}
+                    gradientUnits="userSpaceOnUse"
+                    cx={FOOTER_WORDMARK_WIDTH / 2}
+                    cy={FOOTER_WORDMARK_HEIGHT / 2}
+                    r="240"
+                  >
+                    <stop offset="0%" stopColor="#2B3EF2" />
+                    <stop offset="45%" stopColor="#8793F8" stopOpacity="0.55" />
+                    <stop offset="100%" stopColor="#EDEFF2" stopOpacity="0" />
+                  </radialGradient>
+                </defs>
+                <text
+                  x={FOOTER_WORDMARK_WIDTH / 2}
+                  y={FOOTER_WORDMARK_HEIGHT / 2}
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                  textLength={FOOTER_WORDMARK_WIDTH - 40}
+                  lengthAdjust="spacingAndGlyphs"
+                  fontSize="230"
+                  fontWeight="800"
+                  fill="url(#sp-footer-glow)"
+                  stroke="rgba(43,62,242,0.32)"
+                  strokeWidth="1"
+                  style={{
+                    fontFamily: '"Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif',
+                    fillOpacity: footerWordmarkActive ? 1 : 0,
+                    transition: reduce ? "none" : "fill-opacity .4s ease",
+                  }}
+                >
+                  harshit.dev
+                </text>
+              </svg>
+
+              <div className="mt-8 flex flex-col items-center justify-between gap-3 border-t border-[var(--sp-rule)] pt-5 text-sm text-[var(--sp-slate)] sm:flex-row">
+                <p>© {new Date().getFullYear()} Harshit. All rights reserved.</p>
+                <nav className="flex gap-6" aria-label="Footer links">
+                  <a href={GITHUB_BASE} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[var(--sp-blue)]">GitHub</a>
+                  <a href="https://www.linkedin.com/in/harshit-tiwari-48830b3b4/" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[var(--sp-blue)]">LinkedIn</a>
+                  <a href={`mailto:${EMAIL}`} className="transition-colors hover:text-[var(--sp-blue)]">Email</a>
+                </nav>
+              </div>
             </footer>
           </div>
         </div>

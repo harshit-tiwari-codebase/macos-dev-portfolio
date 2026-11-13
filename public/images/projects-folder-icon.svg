@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="80 80 576 576" width="736" height="736" fill="none">
+  <defs>
+    <linearGradient id="back" x1="0" y1="167" x2="0" y2="520" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3f9de8"/>
+      <stop offset="1" stop-color="#2f8de0"/>
+    </linearGradient>
+    <linearGradient id="front" x1="0" y1="233" x2="0" y2="558" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7accfb"/>
+      <stop offset="0.7" stop-color="#70c3fa"/>
+      <stop offset="1" stop-color="#68bcf8"/>
+    </linearGradient>
+    <clipPath id="frontClip">
+      <rect x="133" y="233" width="467" height="325" rx="46"/>
+    </clipPath>
+    <filter id="blurSoft" x="-20%" y="-50%" width="140%" height="200%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+    <filter id="blurEdge" x="-5%" y="-5%" width="110%" height="115%">
+      <feGaussianBlur stdDeviation="4"/>
+    </filter>
+  </defs>
+
+  <rect x="150" y="548" width="436" height="20" rx="10" fill="#1d6fb8" opacity="0.28" filter="url(#blurSoft)"/>
+  <path d="M135 215 Q135 167 183 167 L262 167 Q290 167 305 185 Q320 203 352 203 L558 203 Q600 203 600 245 L600 520 L135 520 Z" fill="url(#back)"/>
+  <rect x="133" y="229" width="467" height="12" rx="6" fill="#1d6fb8" opacity="0.25" filter="url(#blurEdge)"/>
+  <rect x="133" y="233" width="467" height="325" rx="46" fill="url(#front)"/>
+
+  <g clip-path="url(#frontClip)">
+    <rect x="133" y="511" width="467" height="11" fill="#ffffff" opacity="0.16"/>
+    <rect x="133" y="527" width="467" height="13" fill="#ffffff" opacity="0.12"/>
+    <rect x="133" y="522" width="467" height="3" fill="#4aa8ef" opacity="0.18"/>
+  </g>
+</svg>
