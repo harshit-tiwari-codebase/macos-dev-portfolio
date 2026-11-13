@@ -1,82 +1,65 @@
 import React from "react";
-import { FolderGit2, FileText, Terminal, Code2, Disc3, FileCode } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { FolderGit2 } from "lucide-react";
+import storyFolderIcon from "../../story-folder.svg";
 
-const DesktopIcons = ({ WindowState, setWindowState, setActiveWindow }) => {
+const StoryFolderIcon = () => (
+  <div className="relative">
+    <img
+      src={storyFolderIcon}
+      alt=""
+      draggable="false"
+      className="h-11 w-11 select-none object-contain drop-shadow-[0_4px_14px_rgba(56,87,242,0.4)] transition-transform group-hover:scale-105 sm:h-14 sm:w-14"
+    />
+    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-r from-amber-400 to-amber-300 text-[9px] font-bold text-zinc-950 shadow-md">
+      ✦
+    </span>
+  </div>
+);
+
+const FolderIcon = () => (
+  <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-blue-400/40 bg-blue-500/20 text-blue-400 shadow-lg backdrop-blur-md transition group-hover:scale-105 group-hover:bg-blue-500/30 sm:h-14 sm:w-14">
+    <FolderGit2 className="h-5 w-5 sm:h-6 sm:w-6" />
+  </div>
+);
+
+const AppIcon = ({ children, className = "bg-white/95" }) => (
+  <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-[12px] flex items-center justify-center overflow-hidden shadow-lg transition-transform group-hover:scale-105 ${className}`}>
+    {children}
+  </div>
+);
+
+const DesktopIcons = ({ WindowState, setWindowState, setActiveWindow, onOpenStory }) => {
+  const { t } = useTranslation();
   const openApp = (name) => {
+    if (name === "storyfolder") {
+      onOpenStory?.();
+      return;
+    }
     setWindowState((prev) => ({ ...prev, [name]: true }));
     if (setActiveWindow) setActiveWindow(name);
+    window.dispatchEvent(new CustomEvent("portfolio:restore-window", { detail: name }));
   };
-
-  const hasOpenWindow = Object.values(WindowState).some(Boolean);
 
   const icons = [
     {
+      id: "storyfolder",
+      label: "storyfolder",
+      badge: "Story",
+      isPrimary: true,
+      icon: <StoryFolderIcon />,
+    },
+    {
       id: "projects",
-      label: "All Projects",
+      label: t("projects"),
       badge: "13 Repos",
-      icon: (
-        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-500/20 border border-blue-400/40 flex items-center justify-center text-blue-400 group-hover:scale-105 group-hover:bg-blue-500/30 transition shadow-lg backdrop-blur-md">
-          <FolderGit2 className="w-5 h-5 sm:w-6 sm:h-6" />
-        </div>
-      ),
-    },
-    {
-      id: "resume",
-      label: "Resume.pdf",
-      badge: "PDF",
-      icon: (
-        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-red-500/20 border border-red-400/40 flex items-center justify-center text-red-400 group-hover:scale-105 group-hover:bg-red-500/30 transition shadow-lg backdrop-blur-md">
-          <FileText className="w-5 h-5 sm:w-6 sm:h-6" />
-        </div>
-      ),
-    },
-    {
-      id: "note",
-      label: "Notes.js",
-      badge: "Code",
-      icon: (
-        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-yellow-500/20 border border-yellow-400/40 flex items-center justify-center text-yellow-400 group-hover:scale-105 group-hover:bg-yellow-500/30 transition shadow-lg backdrop-blur-md">
-          <FileCode className="w-5 h-5 sm:w-6 sm:h-6" />
-        </div>
-      ),
-    },
-    {
-      id: "cli",
-      label: "Terminal",
-      badge: "zsh",
-      icon: (
-        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 group-hover:scale-105 group-hover:bg-emerald-500/30 transition shadow-lg backdrop-blur-md">
-          <Terminal className="w-5 h-5 sm:w-6 sm:h-6" />
-        </div>
-      ),
-    },
-    {
-      id: "github",
-      label: "GitHub",
-      badge: "Profile",
-      icon: (
-        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-purple-500/20 border border-purple-400/40 flex items-center justify-center text-purple-400 group-hover:scale-105 group-hover:bg-purple-500/30 transition shadow-lg backdrop-blur-md">
-          <Code2 className="w-5 h-5 sm:w-6 sm:h-6" />
-        </div>
-      ),
-    },
-    {
-      id: "spotify",
-      label: "Spotify",
-      badge: "Music",
-      icon: (
-        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-green-500/20 border border-green-400/40 flex items-center justify-center text-green-400 group-hover:scale-105 group-hover:bg-green-500/30 transition shadow-lg backdrop-blur-md">
-          <Disc3 className="w-5 h-5 sm:w-6 sm:h-6" />
-        </div>
-      ),
+      icon: <FolderIcon />,
     },
   ];
 
   return (
     <div
-      className={`absolute top-10 sm:top-12 left-2 sm:left-4 z-10 flex-col gap-2.5 sm:gap-4 select-none ${
-        hasOpenWindow ? "hidden md:flex" : "flex"
-      }`}
+      className="absolute top-10 sm:top-12 left-2 sm:left-4 z-10 flex flex-col gap-2.5 sm:gap-4 select-none"
     >
       {icons.map((item) => (
         <button
@@ -84,7 +67,9 @@ const DesktopIcons = ({ WindowState, setWindowState, setActiveWindow }) => {
           type="button"
           onClick={() => openApp(item.id)}
           onDoubleClick={() => openApp(item.id)}
-          className="group flex flex-col items-center gap-1 w-16 sm:w-20 p-1 sm:p-1.5 rounded-lg hover:bg-white/10 active:bg-white/20 transition cursor-pointer text-center"
+          className={`group flex flex-col items-center gap-1 w-16 sm:w-20 p-1 sm:p-1.5 rounded-lg hover:bg-white/10 active:bg-white/20 transition cursor-pointer text-center ${
+            item.isPrimary ? "relative" : ""
+          }`}
         >
           {item.icon}
           <span className="text-[10px] sm:text-[11px] font-medium text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] tracking-wide line-clamp-1">

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import axios from "axios";
-import { Search, AppWindow, FolderGit2, Terminal, Palette, ExternalLink } from "lucide-react";
+import { Search, AppWindow, FolderGit2, Terminal, Palette, ExternalLink, LoaderCircle } from "lucide-react";
 
 /* ---------- fuzzy scoring: higher = better match, 0 = no match ---------- */
 function score(query, text) {
@@ -36,6 +36,7 @@ export default function Spotlight({ open, setOpen, items = [] }) {
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
   const [repos, setRepos] = useState([]);
+  const [reposLoading, setReposLoading] = useState(false);
   const inputRef = useRef(null);
   const listRef = useRef(null);
 
@@ -65,10 +66,12 @@ export default function Spotlight({ open, setOpen, items = [] }) {
   /* ---------- load GitHub repos once (silent fail on rate limit) ---------- */
   useEffect(() => {
     if (!open || repos.length) return;
+    setReposLoading(true);
     axios
       .get("https://api.github.com/users/harshit-tiwari-codebase/repos?per_page=100&sort=updated")
       .then((res) => setRepos(res.data))
-      .catch(() => {}); // rate-limited: Projects group simply stays empty
+      .catch(() => {})
+      .finally(() => setReposLoading(false)); // rate-limited: Projects group simply stays empty
   }, [open, repos.length]);
 
   /* ---------- build, filter and rank results ---------- */
@@ -80,6 +83,7 @@ export default function Spotlight({ open, setOpen, items = [] }) {
       group: "Projects",
       keywords: [r.language, ...(r.topics || [])].filter(Boolean).join(" "),
       icon: FolderGit2,
+      image: "/doc-icons/projects.svg",
       action: () => window.open(r.html_url, "_blank", "noopener"),
       external: true,
     }));
@@ -180,7 +184,11 @@ export default function Spotlight({ open, setOpen, items = [] }) {
                           i === active ? "bg-blue-500" : ""
                         }`}
                       >
-                        <Icon size={20} className="shrink-0" />
+                        {item.image ? (
+                          <img src={item.image} alt="" className="h-5 w-5 shrink-0 object-contain" />
+                        ) : (
+                          <Icon size={20} className="shrink-0" />
+                        )}
                         <span className="min-w-0 flex-1">
                           <span className="block truncate text-sm font-medium">{item.title}</span>
                           {item.subtitle && (
@@ -201,7 +209,7 @@ export default function Spotlight({ open, setOpen, items = [] }) {
               </ul>
             ) : (
               <p className="border-t border-white/10 px-4 py-6 text-center text-sm text-white/50">
-                No results for “{query}”
+                {reposLoading ? <span className="inline-flex items-center gap-2"><LoaderCircle size={15} className="animate-spin" /> Loading GitHub projects…</span> : `No results for “${query}”`}
               </p>
             )}
           </motion.div>

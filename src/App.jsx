@@ -1,8 +1,7 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import Wallpaper from "./components/Wallpaper";
 import Dock from "./components/Dock";
 import Navbar from "./components/Navbar";
-import DesktopIcons from "./components/DesktopIcons";
 import ControlCenter from "./components/ControlCenter";
 import Notification from "./components/Notification";
 import Spotlight, { Palette } from "./components/Spotlight";
@@ -12,19 +11,51 @@ import SpotifyWindow from "./components/Windows/SpotifyWindow";
 import Note from "./components/Windows/Note";
 import Resume from "./components/Windows/Resume";
 import Cli from "./components/Windows/Cli";
-import { FolderGit2, Terminal as TerminalIcon, AppWindow, ExternalLink } from "lucide-react";
+import GitHubStatsWindow from "./components/Windows/GitHubStatsWindow";
+import AchievementsWindow from "./components/Windows/AchievementsWindow";
+import ContactWindow from "./components/Windows/ContactWindow";
+import BlogWindow from "./components/Windows/BlogWindow";
+import DesktopIcons from "./components/DesktopIcons";
+import StoryPage from "./components/Story/StoryPage";
+import BootScreen from "./components/BootScreen";
+import { AnimatePresence, motion } from "framer-motion";
+import { AppWindow, ExternalLink } from "lucide-react";
+import storyFolderIcon from "../story-folder.svg";
+
+const DEFAULT_WALLPAPER = "/images/macos-dark-abstract.jpg";
 
 const App = () => {
-  // Start with the Projects window open so visitors immediately see all repositories!
+  // ── Boot screen: show on first visit per browser session ──────────────────
+  const [booting, setBooting] = useState(() => {
+    try {
+      return !sessionStorage.getItem("harshitos_booted");
+    } catch {
+      return true;
+    }
+  });
+
+  const handleBootComplete = () => {
+    try {
+      sessionStorage.setItem("harshitos_booted", "1");
+    } catch { /* ignore */ }
+    setBooting(false);
+  };
+
+  // All windows start closed — clean desktop after boot animation
   const [WindowState, setWindowState] = useState({
-    projects: true,
+    projects: false,
     github: false,
     spotify: false,
     note: false,
     resume: false,
     cli: false,
+    stats: false,
+    achievements: false,
+    contact: false,
+    blog: false,
   });
 
+  const [storyOpen, setStoryOpen] = useState(false);
   const [activeWindow, setActiveWindow] = useState("projects");
   const [controlCenterOpen, setControlCenterOpen] = useState(false);
   const [spotlightOpen, setSpotlightOpen] = useState(false);
@@ -34,10 +65,10 @@ const App = () => {
     try {
       return (
         localStorage.getItem("macos_wallpaper") ||
-        "/images/stranger-things-3840x2160-18568.jpg"
+        DEFAULT_WALLPAPER
       );
     } catch {
-      return "/images/stranger-things-3840x2160-18568.jpg";
+      return DEFAULT_WALLPAPER;
     }
   });
 
@@ -50,15 +81,14 @@ const App = () => {
     }
   };
 
-  const handleOpenProjects = () => {
-    setWindowState((prev) => ({ ...prev, projects: true }));
-    setActiveWindow("projects");
+  const handleOpenWindow = (name) => {
+    setWindowState((prev) => ({ ...prev, [name]: true }));
+    setActiveWindow(name);
+    window.dispatchEvent(new CustomEvent("portfolio:restore-window", { detail: name }));
   };
 
-  const handleOpenCli = () => {
-    setWindowState((prev) => ({ ...prev, cli: true }));
-    setActiveWindow("cli");
-  };
+  const handleOpenProjects = () => handleOpenWindow("projects");
+  const handleOpenCli = () => handleOpenWindow("cli");
 
   // Spotlight search items (Applications & Commands)
   const spotlightItems = useMemo(
@@ -69,7 +99,7 @@ const App = () => {
         subtitle: "Explore 13+ GitHub repositories",
         group: "Applications",
         keywords: "projects code github repos portfolio",
-        icon: FolderGit2,
+        image: "/doc-icons/projects.svg",
         action: () => handleOpenProjects(),
       },
       {
@@ -78,7 +108,7 @@ const App = () => {
         subtitle: "zsh command emulator",
         group: "Applications",
         keywords: "terminal cli shell console zsh bash",
-        icon: TerminalIcon,
+        image: "/doc-icons/cli.svg",
         action: () => handleOpenCli(),
       },
       {
@@ -87,11 +117,8 @@ const App = () => {
         subtitle: "Harshit Tiwari Professional CV",
         group: "Applications",
         keywords: "resume cv pdf education experience",
-        icon: AppWindow,
-        action: () => {
-          setWindowState((s) => ({ ...s, resume: true }));
-          setActiveWindow("resume");
-        },
+        image: "/doc-icons/pdf.svg",
+        action: () => handleOpenWindow("resume"),
       },
       {
         id: "app-note",
@@ -99,11 +126,8 @@ const App = () => {
         subtitle: "Developer notes and skills overview",
         group: "Applications",
         keywords: "notes code dsa learning skills stack",
-        icon: AppWindow,
-        action: () => {
-          setWindowState((s) => ({ ...s, note: true }));
-          setActiveWindow("note");
-        },
+        image: "/doc-icons/note.svg",
+        action: () => handleOpenWindow("note"),
       },
       {
         id: "app-spotify",
@@ -111,11 +135,8 @@ const App = () => {
         subtitle: "Background music player",
         group: "Applications",
         keywords: "spotify music playlist songs audio",
-        icon: AppWindow,
-        action: () => {
-          setWindowState((s) => ({ ...s, spotify: true }));
-          setActiveWindow("spotify");
-        },
+        image: "/doc-icons/spotify.svg",
+        action: () => handleOpenWindow("spotify"),
       },
       {
         id: "app-github",
@@ -123,11 +144,53 @@ const App = () => {
         subtitle: "GitHub activity calendar and repos",
         group: "Applications",
         keywords: "github profile contributions calendar",
-        icon: AppWindow,
-        action: () => {
-          setWindowState((s) => ({ ...s, github: true }));
-          setActiveWindow("github");
-        },
+        image: "/doc-icons/github.svg",
+        action: () => handleOpenWindow("github"),
+      },
+      {
+        id: "app-github-stats",
+        title: "GitHub Stats",
+        subtitle: "Languages, repositories, stars, forks, and activity",
+        group: "Applications",
+        keywords: "github stats languages stars forks contributions",
+        image: "/doc-icons/github-stats.svg",
+        action: () => handleOpenWindow("stats"),
+      },
+      {
+        id: "app-achievements",
+        title: "Achievements & Certificates",
+        subtitle: "Academic record and verified certificates",
+        group: "Applications",
+        keywords: "trophy achievements certificate ey techathon",
+        image: "/doc-icons/achievements.svg",
+        action: () => handleOpenWindow("achievements"),
+      },
+      {
+        id: "app-contact",
+        title: "Contact",
+        subtitle: "Send Harshit a message",
+        group: "Applications",
+        keywords: "contact email message mail",
+        image: "/doc-icons/mail.svg",
+        action: () => handleOpenWindow("contact"),
+      },
+      {
+        id: "app-blog",
+        title: "Blog & Articles",
+        subtitle: "Read published developer articles",
+        group: "Applications",
+        keywords: "blog articles devto writing",
+        image: "/doc-icons/blog.svg",
+        action: () => handleOpenWindow("blog"),
+      },
+      {
+        id: "app-story",
+        title: "My Story (storyfolder)",
+        subtitle: "Hero, About, Skills Arsenal & Animated Journey",
+        group: "Applications",
+        keywords: "story storyfolder hero about skills portfolio journey roadmap",
+        image: storyFolderIcon,
+        action: () => setStoryOpen(true),
       },
       {
         id: "cmd-wallpaper",
@@ -154,7 +217,7 @@ const App = () => {
         group: "Commands",
         keywords: "close hide clear desktop windows",
         icon: AppWindow,
-        action: () =>
+        action: () => {
           setWindowState({
             projects: false,
             github: false,
@@ -162,7 +225,13 @@ const App = () => {
             note: false,
             resume: false,
             cli: false,
-          }),
+            stats: false,
+            achievements: false,
+            contact: false,
+            blog: false,
+          });
+          setStoryOpen(false);
+        },
       },
       {
         id: "cmd-github-profile",
@@ -171,6 +240,7 @@ const App = () => {
         group: "Commands",
         keywords: "github link web url profile",
         icon: ExternalLink,
+        image: "/doc-icons/github.svg",
         action: () =>
           window.open("https://github.com/harshit-tiwari-codebase", "_blank", "noopener"),
         external: true,
@@ -182,6 +252,7 @@ const App = () => {
         group: "Commands",
         keywords: "linkedin social profile network",
         icon: ExternalLink,
+        image: "/doc-icons/link.svg",
         action: () =>
           window.open(
             "https://www.linkedin.com/in/harshit-tiwari-48830b3b4/",
@@ -206,9 +277,27 @@ const App = () => {
   );
 
   return (
-    <div className="w-full h-screen relative bg-zinc-950 overflow-hidden select-none font-[-apple-system,BlinkMacSystemFont,sans-serif]">
+    <>
+      {/* Boot screen (first visit only) */}
+      {booting && <BootScreen onComplete={handleBootComplete} />}
+
+      {/* ── Desktop (fades in after boot) ── */}
+      <motion.div
+        initial={{ opacity: 0, scale: 1.03 }}
+        animate={!booting ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.03 }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        className="w-full h-screen relative bg-zinc-950 overflow-hidden select-none font-[-apple-system,BlinkMacSystemFont,sans-serif]"
+      >
       {/* Background Wallpaper */}
       <Wallpaper currentWallpaper={currentWallpaper} />
+
+      {/* Desktop Icons (including storyfolder) */}
+      <DesktopIcons
+        WindowState={WindowState}
+        setWindowState={setWindowState}
+        setActiveWindow={setActiveWindow}
+        onOpenStory={() => setStoryOpen(true)}
+      />
 
       {/* Top macOS Menu Bar */}
       <Navbar
@@ -240,14 +329,8 @@ const App = () => {
       {/* Entry Notification Banner */}
       <Notification onOpenProjects={handleOpenProjects} />
 
-      {/* Desktop Folders & Shortcuts */}
-      <DesktopIcons
-        WindowState={WindowState}
-        setWindowState={setWindowState}
-        setActiveWindow={setActiveWindow}
-      />
-
       {/* Floating macOS Windows */}
+      <AnimatePresence>
       {WindowState.projects && (
         <ProjectsWindow
           windowName="projects"
@@ -308,14 +391,33 @@ const App = () => {
         />
       )}
 
+      {WindowState.stats && <GitHubStatsWindow windowName="stats" WindowState={WindowState} setWindowState={setWindowState} activeWindow={activeWindow} setActiveWindow={setActiveWindow} />}
+      {WindowState.achievements && <AchievementsWindow windowName="achievements" WindowState={WindowState} setWindowState={setWindowState} activeWindow={activeWindow} setActiveWindow={setActiveWindow} />}
+      {WindowState.contact && <ContactWindow windowName="contact" WindowState={WindowState} setWindowState={setWindowState} activeWindow={activeWindow} setActiveWindow={setActiveWindow} />}
+      {WindowState.blog && <BlogWindow windowName="blog" WindowState={WindowState} setWindowState={setWindowState} activeWindow={activeWindow} setActiveWindow={setActiveWindow} />}
+      </AnimatePresence>
+
+      {/* Dedicated Immersive Story Page (Hero, About, Skills & VerifAi Path Animation) */}
+      <AnimatePresence>
+        {storyOpen && (
+          <StoryPage
+            onClose={() => setStoryOpen(false)}
+            onOpenWindow={handleOpenWindow}
+          />
+        )}
+      </AnimatePresence>
+
       {/* Bottom macOS Dock */}
       <Dock
         WindowState={WindowState}
         setWindowState={setWindowState}
         activeWindow={activeWindow}
         setActiveWindow={setActiveWindow}
+        onOpenStory={() => setStoryOpen(true)}
+        isStoryOpen={storyOpen}
       />
-    </div>
+      </motion.div>
+    </>
   );
 };
 

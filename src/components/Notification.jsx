@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FolderGit2, X, Sparkles } from "lucide-react";
+import { X, Sparkles } from "lucide-react";
 
 const Notification = ({ onOpenProjects }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [notice, setNotice] = useState(null);
 
   useEffect(() => {
     // Show notification 1.2s after page load for realistic macOS entry
@@ -20,6 +21,21 @@ const Notification = ({ onOpenProjects }) => {
       clearTimeout(timer);
       clearTimeout(dismissTimer);
     };
+  }, []);
+
+  useEffect(() => {
+    if (!notice) return undefined;
+    const timer = setTimeout(() => setIsVisible(false), 7000);
+    return () => clearTimeout(timer);
+  }, [notice]);
+
+  useEffect(() => {
+    const onNotification = (event) => {
+      setNotice(event.detail || null);
+      setIsVisible(true);
+    };
+    window.addEventListener("portfolio:notification", onNotification);
+    return () => window.removeEventListener("portfolio:notification", onNotification);
   }, []);
 
   return (
@@ -59,15 +75,15 @@ const Notification = ({ onOpenProjects }) => {
           {/* Body Content */}
           <div className="flex gap-3">
             <div className="w-10 h-10 rounded-xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-blue-400 shrink-0">
-              <FolderGit2 className="w-5 h-5" />
+              <img src="/doc-icons/projects.svg" alt="" className="h-6 w-6" />
             </div>
 
             <div className="flex-1 min-w-0">
               <h4 className="text-xs font-semibold text-white leading-tight">
-                Welcome to my macOS Devfolio!
+                {notice?.title || "Welcome to my macOS Devfolio!"}
               </h4>
               <p className="text-[11px] text-gray-300 mt-1 leading-relaxed">
-                Explore all 13 GitHub projects in the Projects app, check my terminal, or switch wallpapers.
+                {notice?.message || "Explore all 13 GitHub projects in the Projects app, check my terminal, or switch wallpapers."}
               </p>
 
               {/* Action Buttons */}
@@ -76,19 +92,19 @@ const Notification = ({ onOpenProjects }) => {
                   type="button"
                   onClick={() => {
                     setIsVisible(false);
-                    if (onOpenProjects) onOpenProjects();
+                    if (!notice && onOpenProjects) onOpenProjects();
                   }}
                   className="px-3 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium transition cursor-pointer shadow-sm shadow-blue-500/30"
                 >
-                  View All Projects
+                  {notice ? "Got it" : "View All Projects"}
                 </button>
-                <button
+                {!notice && <button
                   type="button"
                   onClick={() => setIsVisible(false)}
                   className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-gray-300 text-xs transition cursor-pointer"
                 >
                   Dismiss
-                </button>
+                </button>}
               </div>
             </div>
           </div>

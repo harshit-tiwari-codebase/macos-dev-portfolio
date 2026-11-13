@@ -1,50 +1,35 @@
-import React, { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import MacWindow from "./MacWindow";
 import {
-  FolderGit2,
   Search,
   Star,
   GitFork,
   ExternalLink,
   RefreshCw,
   Code2,
-  Sparkles,
-  Layers,
   ArrowUpRight,
 } from "lucide-react";
-import { FaGithub } from "react-icons/fa";
 
 const GITHUB_USERNAME = "harshit-tiwari-codebase";
+const HIDDEN_PROJECTS = new Set(["tracemail", "tracemail-", "blocktraceai", "blocktrace"]);
 
 // Curated fallbacks with friendly descriptions if GitHub API is rate-limited or descriptions are empty
 const FALLBACK_PROJECTS = [
   {
     id: 1,
-    name: "BlockTraceAI",
-    description: "AI-assisted blockchain transaction intelligence and tracking application.",
+    name: "Argus",
+    description: "Project repository for Argus.",
     language: "JavaScript",
     stargazers_count: 1,
     forks_count: 0,
-    html_url: "https://github.com/harshit-tiwari-codebase/BlockTraceAI",
+    html_url: "https://github.com/harshit-tiwari-codebase/Argus",
     homepage: "",
-    topics: ["ai", "blockchain", "javascript", "security"],
+    topics: ["argus"],
     updated_at: "2026-04-15T00:00:00Z",
   },
   {
     id: 2,
-    name: "TraceMail-",
-    description: "Robust email intelligence, verification, and automated delivery analytics platform.",
-    language: "TypeScript",
-    stargazers_count: 0,
-    forks_count: 0,
-    html_url: "https://github.com/harshit-tiwari-codebase/TraceMail-",
-    homepage: "",
-    topics: ["typescript", "email-api", "automation"],
-    updated_at: "2026-04-12T00:00:00Z",
-  },
-  {
-    id: 3,
     name: "VerifAi",
     description: "AI verification engine designed for authenticity analysis and digital trust evaluation.",
     language: "JavaScript",
@@ -56,7 +41,7 @@ const FALLBACK_PROJECTS = [
     updated_at: "2026-04-10T00:00:00Z",
   },
   {
-    id: 4,
+    id: 3,
     name: "macos-dev-portfolio",
     description: "Interactive macOS-styled desktop developer portfolio built with React and Tailwind CSS.",
     language: "JavaScript",
@@ -68,7 +53,7 @@ const FALLBACK_PROJECTS = [
     updated_at: "2026-05-10T00:00:00Z",
   },
   {
-    id: 5,
+    id: 4,
     name: "Nexora",
     description: "Next-gen web application platform with modern fluid UI, animations, and high performance.",
     language: "JavaScript",
@@ -80,7 +65,7 @@ const FALLBACK_PROJECTS = [
     updated_at: "2026-03-20T00:00:00Z",
   },
   {
-    id: 6,
+    id: 5,
     name: "pixlify-mern",
     description: "Full-stack MERN image editing and photo sharing web app with cloud asset storage.",
     language: "JavaScript",
@@ -92,7 +77,7 @@ const FALLBACK_PROJECTS = [
     updated_at: "2026-03-15T00:00:00Z",
   },
   {
-    id: 7,
+    id: 6,
     name: "Refokus-Clone",
     description: "Pixel-perfect clone of Refokus agency website featuring award-winning GSAP animations.",
     language: "JavaScript",
@@ -104,7 +89,7 @@ const FALLBACK_PROJECTS = [
     updated_at: "2026-03-01T00:00:00Z",
   },
   {
-    id: 8,
+    id: 7,
     name: "emotify",
     description: "Real-time facial expression and mood-based music and content recommendation app.",
     language: "JavaScript",
@@ -116,7 +101,7 @@ const FALLBACK_PROJECTS = [
     updated_at: "2026-02-28T00:00:00Z",
   },
   {
-    id: 9,
+    id: 8,
     name: "Productivity-Dashboard",
     description: "Personal productivity suite with Pomodoro timer, task manager, and progress charts.",
     language: "CSS",
@@ -128,7 +113,7 @@ const FALLBACK_PROJECTS = [
     updated_at: "2026-02-15T00:00:00Z",
   },
   {
-    id: 10,
+    id: 9,
     name: "CSS-UI-CLONE-PROJECTS",
     description: "Curated collection of responsive UI component clones and modern CSS layout patterns.",
     language: "JavaScript",
@@ -140,7 +125,7 @@ const FALLBACK_PROJECTS = [
     updated_at: "2026-02-10T00:00:00Z",
   },
   {
-    id: 11,
+    id: 10,
     name: "JS-MINI-PROJECT",
     description: "Collection of interactive JavaScript mini-games, algorithms, and DOM utility experiments.",
     language: "JavaScript",
@@ -152,7 +137,7 @@ const FALLBACK_PROJECTS = [
     updated_at: "2026-01-25T00:00:00Z",
   },
   {
-    id: 12,
+    id: 11,
     name: "LEARNINGS",
     description: "Structured repository of daily coding practice, algorithms, and full-stack learnings.",
     language: "JavaScript",
@@ -164,7 +149,7 @@ const FALLBACK_PROJECTS = [
     updated_at: "2026-01-10T00:00:00Z",
   },
   {
-    id: 13,
+    id: 12,
     name: "harshit-tiwari-codebase",
     description: "GitHub Profile documentation, stats, and personal open-source portfolio overview.",
     language: "Markdown",
@@ -213,7 +198,9 @@ const ProjectsWindow = ({
         // Enrich repos with descriptions from fallback if empty
         const fallbackMap = new Map(FALLBACK_PROJECTS.map((p) => [p.name.toLowerCase(), p]));
 
-        const enriched = response.data.map((repo) => {
+        const enriched = response.data
+          .filter((repo) => !HIDDEN_PROJECTS.has(repo.name.toLowerCase()))
+          .map((repo) => {
           const fb = fallbackMap.get(repo.name.toLowerCase());
           return {
             id: repo.id,
@@ -235,7 +222,11 @@ const ProjectsWindow = ({
           };
         });
 
-        setProjects(enriched);
+        const preservedProjects = FALLBACK_PROJECTS.filter((project) =>
+          ["argus", "nexora", "pixlify-mern"].includes(project.name.toLowerCase()) &&
+          !enriched.some((repo) => repo.name.toLowerCase() === project.name.toLowerCase())
+        );
+        setProjects([...preservedProjects, ...enriched]);
       } else {
         setProjects(FALLBACK_PROJECTS);
       }
@@ -312,116 +303,96 @@ const ProjectsWindow = ({
       initialX={220}
       initialY={70}
     >
-      <div className="w-full h-full flex flex-col bg-[#0d1117] text-gray-100 overflow-hidden">
-        {/* Header Bar */}
-        <div className="p-4 sm:p-5 border-b border-[#30363d] bg-[#161b22]/90 backdrop-blur-md flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-blue-600/20 text-blue-400 border border-blue-500/30">
-              <FolderGit2 className="w-6 h-6" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-                  All Projects
-                </h1>
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/30">
-                  {projects.length} Repositories
-                </span>
-              </div>
-              <p className="text-xs sm:text-sm text-gray-400">
-                Fetched live from GitHub (@{GITHUB_USERNAME})
-              </p>
-            </div>
+      <div className="flex h-full w-full flex-col overflow-hidden bg-[#10141a] text-[#e9edf3]">
+        <header className="flex flex-wrap items-end justify-between gap-4 border-b border-[#2a313c] bg-[#141922] px-4 py-4 sm:px-6">
+          <div>
+            <p className="mb-1 text-xs text-[#8f9aaa]">GitHub · @{GITHUB_USERNAME}</p>
+            <h1 className="text-2xl font-semibold tracking-[-0.04em] sm:text-3xl">Projects</h1>
+            <p className="mt-1 text-sm text-[#9ba6b4]">A working collection of experiments and products.</p>
           </div>
 
-          {/* Quick Actions */}
           <div className="flex items-center gap-2">
+            <span className="mr-1 text-xs text-[#8f9aaa]">{projects.length} public repositories</span>
             <button
+              type="button"
               onClick={fetchProjects}
               disabled={loading}
               title="Refresh from GitHub"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-medium text-gray-300 transition cursor-pointer disabled:opacity-50"
+              className="flex items-center gap-1.5 rounded-lg border border-[#343d49] bg-[#1a2029] px-3 py-2 text-sm font-medium text-[#c8d0db] transition-colors hover:bg-[#252d38] disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a6b7ff]"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-blue-400" : ""}`} />
-              <span className="hidden sm:inline">Sync</span>
+              <RefreshCw className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`} />
+              Sync
             </button>
             <a
               href={`https://github.com/${GITHUB_USERNAME}`}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/10 text-xs font-medium text-white transition"
+              className="flex items-center gap-1.5 rounded-lg bg-[#d5defd] px-3 py-2 text-sm font-semibold text-[#19233a] transition-colors hover:bg-[#bdcbff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a6b7ff]"
             >
-              <FaGithub className="w-3.5 h-3.5" />
-              <span>GitHub</span>
-              <ArrowUpRight className="w-3 h-3 text-gray-400" />
+              <img src="/doc-icons/github.svg" alt="" className="h-3.5 w-3.5 brightness-0" />
+              Profile
+              <ArrowUpRight className="h-3 w-3 text-white/65" />
             </a>
           </div>
-        </div>
+        </header>
 
-        {/* Filter & Search Bar */}
-        <div className="p-3 sm:px-5 sm:py-3 border-b border-[#30363d] bg-[#161b22]/50 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
-          {/* Search Box */}
-          <div className="relative flex-1 max-w-md">
-            <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+        <div className="flex flex-col gap-3 border-b border-[#2a313c] bg-[#121720] px-4 py-3 sm:flex-row sm:items-center sm:px-6">
+          <div className="relative w-full sm:max-w-xs">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7f8a98]" />
             <input
-              type="text"
+              type="search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search by project name, tech, or topic..."
-              className="w-full bg-[#0d1117] border border-[#30363d] focus:border-blue-500 focus:outline-none rounded-lg pl-9 pr-3 py-1.5 text-xs sm:text-sm text-white placeholder-gray-500 transition"
+              placeholder="Search projects"
+              aria-label="Search projects"
+              className="w-full rounded-lg border border-[#303a47] bg-[#171d26] py-2 pl-9 pr-3 text-sm text-[#e9edf3] outline-none transition focus:border-[#8097e7] focus:ring-2 focus:ring-[#8097e7]/20 placeholder:text-[#7f8a98]"
             />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery("")}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-xs"
-              >
-                ✕
-              </button>
-            )}
           </div>
 
-          {/* Tags Filter */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 text-xs">
-            {[
-              { id: "all", label: "All" },
-              { id: "javascript", label: "JavaScript" },
-              { id: "typescript", label: "TypeScript" },
-              { id: "ai", label: "AI & ML" },
-              { id: "web", label: "Full Stack" },
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setSelectedTag(tab.id)}
-                className={`px-2.5 py-1 rounded-md transition whitespace-nowrap font-medium ${
-                  selectedTag === tab.id
-                    ? "bg-blue-600 text-white shadow-sm"
-                    : "bg-white/5 hover:bg-white/10 text-gray-300"
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-
-            {/* Sort Dropdown */}
+          <div className="flex min-w-0 items-center gap-4 overflow-x-auto sm:ml-auto">
+            <div className="flex shrink-0 items-center gap-4">
+              {[
+                { id: "all", label: "All" },
+                { id: "javascript", label: "JavaScript" },
+                { id: "typescript", label: "TypeScript" },
+                { id: "ai", label: "AI & ML" },
+                { id: "web", label: "Full Stack" },
+              ].map((tab) => (
+                <button
+                  type="button"
+                  key={tab.id}
+                  onClick={() => setSelectedTag(tab.id)}
+                  aria-pressed={selectedTag === tab.id}
+                  className={`whitespace-nowrap border-b-2 py-2 text-sm transition-colors ${
+                    selectedTag === tab.id
+                      ? "border-[#9aacf5] font-semibold text-[#c1ceff]"
+                      : "border-transparent text-[#9ba6b4] hover:text-[#e9edf3]"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
             <select
+              aria-label="Sort projects"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="bg-[#0d1117] border border-[#30363d] text-gray-300 rounded-md px-2 py-1 text-xs focus:outline-none focus:border-blue-500 ml-1 cursor-pointer"
+              className="shrink-0 rounded-lg border border-[#303a47] bg-[#171d26] px-2.5 py-2 text-xs text-[#c5ccd6] outline-none focus:border-[#8097e7]"
             >
-              <option value="updated">Recently Updated</option>
-              <option value="stars">Most Stars</option>
-              <option value="name">Name (A-Z)</option>
+              <option value="updated">Recently updated</option>
+              <option value="stars">Most stars</option>
+              <option value="name">Name (A–Z)</option>
             </select>
           </div>
         </div>
 
         {/* Notice banner if rate limited */}
         {error && (
-          <div className="bg-amber-500/10 border-b border-amber-500/20 px-4 py-1.5 text-xs text-amber-300 flex items-center justify-between">
+          <div role="status" className="flex items-center justify-between border-b border-[#4c4027] bg-[#282318] px-4 py-2 text-xs text-[#e0c989]">
             <span>{error}</span>
             <button
               onClick={() => setError(null)}
-              className="text-amber-400 hover:text-amber-200 ml-2"
+              className="ml-2 text-[#c9b36f] hover:text-[#fff0bd]"
             >
               ✕
             </button>
@@ -429,35 +400,24 @@ const ProjectsWindow = ({
         )}
 
         {/* Content Body */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-5">
+        <div className="min-h-0 flex-1 overflow-y-auto px-4 sm:px-6">
           {loading ? (
-            /* Loading Skeleton Grid */
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {[1, 2, 3, 4, 5, 6].map((n) => (
-                <div
-                  key={n}
-                  className="bg-[#161b22] border border-[#30363d] rounded-xl p-5 animate-pulse space-y-3"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="h-5 w-32 bg-gray-700/50 rounded" />
-                    <div className="h-4 w-10 bg-gray-700/50 rounded" />
-                  </div>
-                  <div className="h-10 bg-gray-700/30 rounded" />
-                  <div className="flex gap-2">
-                    <div className="h-4 w-16 bg-gray-700/40 rounded-full" />
-                    <div className="h-4 w-12 bg-gray-700/40 rounded-full" />
-                  </div>
+            <div className="divide-y divide-[#29313b]">
+              {[1, 2, 3, 4, 5].map((n) => (
+                <div key={n} className="animate-pulse space-y-2 py-5">
+                  <div className="h-4 w-40 rounded bg-[#27303b]" />
+                  <div className="h-3 w-3/4 rounded bg-[#202832]" />
                 </div>
               ))}
             </div>
           ) : filteredProjects.length === 0 ? (
             /* Empty State */
-            <div className="flex flex-col items-center justify-center h-64 text-center">
-              <FolderGit2 className="w-12 h-12 text-gray-600 mb-3" />
-              <h3 className="text-base font-semibold text-gray-300">
+            <div className="flex h-64 flex-col items-center justify-center text-center">
+              <img src="/doc-icons/projects.svg" alt="" className="mb-3 h-10 w-10" />
+              <h3 className="text-base font-semibold text-[#dfe4ec]">
                 No matching projects found
               </h3>
-              <p className="text-xs text-gray-500 mt-1 max-w-sm">
+              <p className="mt-1 max-w-sm text-sm text-[#9ba6b4]">
                 Try searching with a different keyword or resetting your filter.
               </p>
               <button
@@ -465,109 +425,81 @@ const ProjectsWindow = ({
                   setSearchQuery("");
                   setSelectedTag("all");
                 }}
-                className="mt-4 px-3 py-1.5 rounded-lg bg-blue-600/30 hover:bg-blue-600/50 text-blue-300 text-xs transition"
+                className="mt-4 rounded-lg border border-[#343d49] bg-[#1a2029] px-3 py-2 text-sm font-medium text-[#c1ceff] transition-colors hover:bg-[#252d38] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a6b7ff]"
               >
                 Clear Filters
               </button>
             </div>
           ) : (
-            /* Projects Grid */
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            <div className="divide-y divide-[#29313b] border-y border-[#29313b]">
               {filteredProjects.map((project) => {
                 const langColor =
                   LANGUAGE_COLORS[project.language] || "#8b949e";
 
                 return (
-                  <div
-                    key={project.id}
-                    className="group bg-[#161b22] hover:bg-[#1a202c] border border-[#30363d] hover:border-blue-500/50 rounded-xl p-4 flex flex-col justify-between transition-all duration-200 shadow-sm hover:shadow-md"
-                  >
-                    <div>
-                      {/* Top Row: Name & Tag */}
-                      <div className="flex items-start justify-between gap-2 mb-2">
-                        <div className="flex items-center gap-2 min-w-0">
-                          <Code2 className="w-4 h-4 text-blue-400 shrink-0" />
-                          <h3
-                            className="font-semibold text-sm sm:text-base text-white truncate group-hover:text-blue-400 transition"
-                            title={project.name}
-                          >
-                            {project.name}
-                          </h3>
-                        </div>
-                        <span className="text-[10px] uppercase font-semibold px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-gray-400 shrink-0">
-                          Public
-                        </span>
+                  <article key={project.id} className="flex flex-col gap-3 py-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <Code2 className="h-4 w-4 shrink-0 text-[#8a98af]" />
+                        <h3 className="truncate text-sm font-semibold text-[#b8c7ff] sm:text-base" title={project.name}>
+                          {project.name}
+                        </h3>
+                        <span className="text-xs text-[#798493]">Public</span>
                       </div>
-
-                      {/* Description */}
-                      <p className="text-xs text-gray-400 leading-relaxed line-clamp-3 mb-3">
+                      <p className="mt-1 max-w-3xl text-sm leading-relaxed text-[#a2adba]">
                         {project.description}
                       </p>
-
-                      {/* Topics / Tags */}
-                      {project.topics && project.topics.length > 0 && (
-                        <div className="flex flex-wrap gap-1 mb-3">
-                          {project.topics.slice(0, 3).map((topic) => (
-                            <span
-                              key={topic}
-                              className="text-[10px] px-2 py-0.5 rounded-md bg-blue-500/10 text-blue-300 border border-blue-500/20"
-                            >
-                              #{topic}
-                            </span>
-                          ))}
-                        </div>
+                      {project.topics?.length > 0 && (
+                        <p className="mt-2 truncate text-xs text-[#8995a4]">
+                          {project.topics.slice(0, 3).join(" · ")}
+                        </p>
                       )}
                     </div>
 
-                    {/* Bottom Row: Metadata & Action Links */}
-                    <div className="pt-3 border-t border-[#30363d]/60 flex items-center justify-between text-xs text-gray-400">
-                      {/* Language & Stats */}
-                      <div className="flex items-center gap-3">
-                        {project.language && (
-                          <div className="flex items-center gap-1.5 text-xs text-gray-300">
-                            <span
-                              className="w-2.5 h-2.5 rounded-full inline-block"
-                              style={{ backgroundColor: langColor }}
-                            />
-                            <span>{project.language}</span>
-                          </div>
-                        )}
-                        {project.stargazers_count > 0 && (
-                          <div className="flex items-center gap-1 text-xs text-amber-400">
-                            <Star className="w-3 h-3 fill-amber-400" />
-                            <span>{project.stargazers_count}</span>
-                          </div>
-                        )}
-                      </div>
+                    <div className="flex shrink-0 flex-wrap items-center gap-x-4 gap-y-2 text-xs text-[#9ba6b4]">
+                      {project.language && (
+                        <span className="flex items-center gap-1.5">
+                          <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: langColor }} />
+                          {project.language}
+                        </span>
+                      )}
+                      {project.stargazers_count > 0 && (
+                        <span className="flex items-center gap-1.5">
+                          <Star className="h-3 w-3 text-[#d2b76f]" />
+                          {project.stargazers_count}
+                        </span>
+                      )}
+                      {project.forks_count > 0 && (
+                        <span className="flex items-center gap-1.5">
+                          <GitFork className="h-3 w-3" />
+                          {project.forks_count}
+                        </span>
+                      )}
+                      <a
+                        href={project.html_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        title="View source on GitHub"
+                        className="inline-flex items-center gap-1.5 rounded-md border border-[#343d49] bg-[#191f28] px-2.5 py-1.5 font-medium text-[#c4ccd7] transition-colors hover:bg-[#252d38] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a6b7ff]"
+                      >
+                        <img src="/doc-icons/github.svg" alt="" className="h-3 w-3" />
+                        Code
+                      </a>
 
-                      {/* Action Buttons */}
-                      <div className="flex items-center gap-1.5">
+                      {project.homepage && (
                         <a
-                          href={project.html_url}
+                          href={project.homepage}
                           target="_blank"
                           rel="noreferrer"
-                          title="View Source on GitHub"
-                          className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-white/5 hover:bg-white/15 text-gray-200 transition text-xs border border-white/10"
+                          title="Open live preview"
+                          className="inline-flex items-center gap-1.5 rounded-md border border-[#343d49] bg-[#191f28] px-2.5 py-1.5 font-medium text-[#c4ccd7] transition-colors hover:bg-[#252d38] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a6b7ff]"
                         >
-                          <FaGithub className="w-3 h-3" />
-                          <span>Code</span>
+                          <ExternalLink className="h-3 w-3" />
+                          Live
                         </a>
-
-                        {project.homepage && (
-                          <a
-                            href={project.homepage}
-                            target="_blank"
-                            rel="noreferrer"
-                            title="Open Live Preview"
-                            className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-blue-600 hover:bg-blue-500 text-white transition text-xs font-medium"
-                          >
-                            <ExternalLink className="w-3 h-3" />
-                            <span>Live</span>
-                          </a>
-                        )}
-                      </div>
+                      )}
                     </div>
-                  </div>
+                  </article>
                 );
               })}
             </div>
@@ -575,16 +507,16 @@ const ProjectsWindow = ({
         </div>
 
         {/* Footer Summary */}
-        <div className="px-4 py-2 bg-[#161b22] border-t border-[#30363d] text-xs text-gray-400 flex items-center justify-between">
+        <div className="flex items-center justify-between border-t border-[#2a313c] bg-[#141922] px-4 py-2 text-xs text-[#8f9aaa]">
           <div className="flex items-center gap-2">
             <span>Showing {filteredProjects.length} of {projects.length} repositories</span>
             {totalStars > 0 && (
-              <span className="flex items-center gap-1 text-amber-400">
-                • <Star className="w-3 h-3 fill-amber-400 inline" /> {totalStars} Stars
+              <span className="flex items-center gap-1">
+                <Star className="inline h-3 w-3 text-[#d2b76f]" /> {totalStars} stars
               </span>
             )}
           </div>
-          <div className="text-gray-500 text-[11px] hidden sm:block">
+          <div className="hidden text-[11px] text-[#87919d] sm:block">
             Harshit Tiwari • Devfolio
           </div>
         </div>

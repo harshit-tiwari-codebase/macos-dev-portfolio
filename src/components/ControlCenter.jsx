@@ -1,8 +1,15 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, Image, Moon, Volume2, Wifi, Sparkles, FolderGit2, X } from "lucide-react";
+import { Check, Image, Moon, Volume2, Sparkles, X } from "lucide-react";
 
 export const WALLPAPERS = [
+  {
+    id: "macos-dark-abstract",
+    name: "Midnight Abstract",
+    subtitle: "Dark macOS Design",
+    url: "/images/macos-dark-abstract.jpg",
+    thumb: "/images/macos-dark-abstract.jpg",
+  },
   {
     id: "stranger-things",
     name: "Stranger Things",
@@ -81,7 +88,7 @@ const ControlCenter = ({
             <div className="grid grid-cols-2 gap-2 mb-3">
               <div className="bg-white/5 border border-white/10 rounded-xl p-2.5 flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white">
-                  <Wifi className="w-4 h-4" />
+                  <img src="/navbar-icons/wifi.svg" alt="" className="h-4 w-4" />
                 </div>
                 <div>
                   <p className="text-[11px] font-semibold text-white">Wi-Fi</p>
@@ -97,7 +104,7 @@ const ControlCenter = ({
                 className="bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl p-2.5 flex items-center gap-2.5 cursor-pointer transition"
               >
                 <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center text-white">
-                  <FolderGit2 className="w-4 h-4" />
+                  <img src="/doc-icons/projects.svg" alt="" className="h-5 w-5" />
                 </div>
                 <div>
                   <p className="text-[11px] font-semibold text-white">Projects</p>

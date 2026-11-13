@@ -1,7 +1,6 @@
-import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const Wallpaper = ({ currentWallpaper = "/images/stranger-things-3840x2160-18568.jpg" }) => {
+const Wallpaper = ({ currentWallpaper = "/images/macos-dark-abstract.jpg" }) => {
   return (
     <div className="absolute inset-0 w-full h-full pointer-events-none select-none overflow-hidden bg-black">
       <AnimatePresence mode="popLayout">

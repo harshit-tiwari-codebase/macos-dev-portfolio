@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import MacWindow from "./MacWindow";
 import axios from "axios";
 import SyntaxHighlighter from "react-syntax-highlighter";
-import { atelierDuneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { Copy } from "lucide-react";
+import { atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 const Note = ({ windowName, WindowState, setWindowState, activeWindow, setActiveWindow }) => {
   const [markdown, setMarkdown] = useState("");
@@ -36,43 +37,55 @@ const Note = ({ windowName, WindowState, setWindowState, activeWindow, setActive
       WindowState={WindowState}
       activeWindow={activeWindow}
       setActiveWindow={setActiveWindow}
-      title="Notes.js — Quick Overview"
-      initialWidth={680}
-      initialHeight={480}
+      title="Developer Notes"
+      initialWidth={720}
+      initialHeight={520}
     >
-      <div className="w-full h-full flex flex-col bg-[#0d1117] text-white">
-        <div className="flex items-center justify-between px-3 sm:px-4 py-2 bg-white/5 border-b border-white/10 text-xs text-gray-400">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-yellow-400"></span>
-            <span className="text-[11px] sm:text-xs">Notes.js (Read-only)</span>
+      <div className="flex h-full w-full flex-col bg-[#10141a] text-[#e9edf3]">
+        <div className="flex shrink-0 items-center justify-between gap-3 border-b border-[#2a313c] bg-[#141922] px-4 py-3">
+          <div className="flex min-w-0 items-center gap-2.5">
+            <img src="/doc-icons/note.svg" alt="" className="h-4 w-4 shrink-0" />
+            <div className="min-w-0">
+              <p className="truncate text-sm font-medium">profile.js</p>
+              <p className="text-[11px] text-[#8793a2]">Developer overview · Read only</p>
+            </div>
           </div>
           <button
+            type="button"
             onClick={handleCopy}
-            className="px-2.5 py-1 rounded bg-white/10 hover:bg-white/20 text-xs text-gray-200 transition cursor-pointer"
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-[#343d49] bg-[#1a2029] px-3 py-2 text-xs font-medium text-[#c8d0db] transition-colors hover:bg-[#252d38] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a6b7ff]"
           >
-            {copied ? "Copied!" : "Copy Code"}
+            <Copy className="h-3.5 w-3.5" />
+            {copied ? "Copied" : "Copy"}
           </button>
         </div>
 
-        <div className="flex-1 overflow-auto text-xs sm:text-sm p-1 sm:p-2">
+        <div className="min-h-0 flex-1 overflow-auto p-4 sm:p-6">
           {markdown ? (
-            <SyntaxHighlighter
-              language="javascript"
-              style={atelierDuneDark}
-              customStyle={{
-                background: "transparent",
-                margin: 0,
-                padding: "0.75rem",
-                fontSize: "0.8rem",
-                lineHeight: "1.45",
-              }}
-              showLineNumbers
-            >
-              {markdown}
-            </SyntaxHighlighter>
+            <div className="mx-auto max-w-4xl overflow-hidden border border-[#2b333d] bg-[#151b24]">
+              <div className="flex items-center justify-between border-b border-[#2b333d] px-4 py-2">
+                <span className="font-mono text-[11px] text-[#8793a2]">profile.js</span>
+                <span className="text-[11px] text-[#788493]">JavaScript</span>
+              </div>
+              <SyntaxHighlighter
+                language="javascript"
+                style={atomOneDark}
+                customStyle={{
+                  background: "transparent",
+                  margin: 0,
+                  padding: "1rem 0.75rem",
+                  fontSize: "0.8rem",
+                  lineHeight: "1.65",
+                }}
+                lineNumberStyle={{ color: "#778493", minWidth: "3.25em" }}
+                showLineNumbers
+              >
+                {markdown}
+              </SyntaxHighlighter>
+            </div>
           ) : (
-            <div className="flex items-center justify-center h-full text-gray-400 text-xs">
-              Loading note...
+            <div className="flex h-full items-center justify-center text-sm text-[#8793a2]" role="status">
+              Loading notes…
             </div>
           )}
         </div>

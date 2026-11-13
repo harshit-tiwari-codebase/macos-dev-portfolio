@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import DateTime from "./DateTime";
-import { SlidersHorizontal, Image, Search } from "lucide-react";
+import { SlidersHorizontal, Image, Search, Globe2 } from "lucide-react";
 
 const Navbar = ({
   WindowState,
@@ -10,6 +11,7 @@ const Navbar = ({
   setControlCenterOpen,
   setSpotlightOpen,
 }) => {
+  const { t, i18n } = useTranslation();
   const [appleMenuOpen, setAppleMenuOpen] = useState(false);
   const [fileMenuOpen, setFileMenuOpen] = useState(false);
   const [aboutModalOpen, setAboutModalOpen] = useState(false);
@@ -17,6 +19,7 @@ const Navbar = ({
   const openApp = (name) => {
     setWindowState((prev) => ({ ...prev, [name]: true }));
     if (setActiveWindow) setActiveWindow(name);
+    window.dispatchEvent(new CustomEvent("portfolio:restore-window", { detail: name }));
     setAppleMenuOpen(false);
     setFileMenuOpen(false);
   };
@@ -127,6 +130,10 @@ const Navbar = ({
                       note: false,
                       resume: false,
                       cli: false,
+                      stats: false,
+                      achievements: false,
+                      contact: false,
+                      blog: false,
                     });
                     setAppleMenuOpen(false);
                   }}
@@ -152,7 +159,7 @@ const Navbar = ({
             onClick={() => openApp("projects")}
             className="hover:bg-white/10 px-2 py-0.5 rounded transition cursor-pointer text-gray-200 hidden sm:block"
           >
-            Projects
+            {t("projects")}
           </button>
 
           {/* File Menu */}
@@ -205,6 +212,10 @@ const Navbar = ({
                       note: false,
                       resume: false,
                       cli: false,
+                      stats: false,
+                      achievements: false,
+                      contact: false,
+                      blog: false,
                     });
                     setFileMenuOpen(false);
                   }}
@@ -221,7 +232,7 @@ const Navbar = ({
             onClick={() => openApp("cli")}
             className="hover:bg-white/10 px-2 py-0.5 rounded transition cursor-pointer text-gray-200 hidden lg:block"
           >
-            Terminal
+            {t("terminal")}
           </button>
 
           <button
@@ -229,7 +240,7 @@ const Navbar = ({
             onClick={() => openApp("resume")}
             className="hover:bg-white/10 px-2 py-0.5 rounded transition cursor-pointer text-gray-200 hidden lg:block"
           >
-            Resume
+            {t("resume")}
           </button>
         </div>
 
@@ -237,12 +248,23 @@ const Navbar = ({
         <div className="flex items-center gap-1 sm:gap-2 shrink-0">
           <div className="hidden lg:flex items-center gap-1.5 text-[11px] text-gray-300 mr-1" title="Full Stack Developer">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Available for hire</span>
+            <span>{t("available")}</span>
           </div>
 
           <div title="Wi-Fi Connected" className="opacity-90 hidden sm:block p-1">
             <img src="/navbar-icons/wifi.svg" alt="Wi-Fi" className="w-3.5 h-3.5" />
           </div>
+
+          <button
+            type="button"
+            onClick={() => i18n.changeLanguage(i18n.language.startsWith("hi") ? "en" : "hi")}
+            className="flex items-center gap-1 rounded px-1.5 py-1 text-gray-200 transition hover:bg-white/10"
+            title={t("language")}
+            aria-label={`${t("language")}: ${i18n.language.startsWith("hi") ? "हिंदी" : "English"}`}
+          >
+            <Globe2 className="h-3.5 w-3.5" />
+            <span className="text-[10px] font-medium">{i18n.language.startsWith("hi") ? "हिंदी" : "EN"}</span>
+          </button>
 
           {/* Spotlight Search Toggle Button */}
           <button
@@ -269,7 +291,7 @@ const Navbar = ({
             className={`p-1 rounded transition cursor-pointer flex items-center justify-center ${
               controlCenterOpen ? "bg-white/20 text-white" : "hover:bg-white/10 text-gray-200"
             }`}
-            title="Control Center & Wallpapers"
+            title={t("wallpaper")}
           >
             <SlidersHorizontal className="w-3.5 h-3.5" />
           </button>

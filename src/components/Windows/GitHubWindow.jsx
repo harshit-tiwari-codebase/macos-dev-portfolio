@@ -1,38 +1,30 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import MacWindow from "./MacWindow";
 import { GitHubCalendar } from "react-github-calendar";
 import {
-  FaGithub,
   FaStar,
   FaCodeBranch,
   FaExternalLinkAlt,
 } from "react-icons/fa";
-import { FolderGit2 } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 
 const username = "harshit-tiwari-codebase";
+const HIDDEN_PROJECTS = new Set(["tracemail", "tracemail-", "blocktraceai", "blocktrace"]);
+const PINNED_PROJECTS = ["argus", "pixlify-mern", "nexora"];
 
 const FALLBACK_FEATURED = [
   {
     id: 1,
-    name: "BlockTraceAI",
-    description: "AI-assisted blockchain transaction intelligence and tracking application.",
+    name: "Argus",
+    description: "Project repository for Argus.",
     language: "JavaScript",
     stargazers_count: 1,
     forks_count: 0,
-    html_url: "https://github.com/harshit-tiwari-codebase/BlockTraceAI",
+    html_url: "https://github.com/harshit-tiwari-codebase/Argus",
   },
   {
     id: 2,
-    name: "TraceMail-",
-    description: "Robust email intelligence, verification, and automated analytics platform.",
-    language: "TypeScript",
-    stargazers_count: 0,
-    forks_count: 0,
-    html_url: "https://github.com/harshit-tiwari-codebase/TraceMail-",
-  },
-  {
-    id: 3,
     name: "VerifAi",
     description: "AI verification engine designed for authenticity analysis and digital trust.",
     language: "JavaScript",
@@ -41,13 +33,22 @@ const FALLBACK_FEATURED = [
     html_url: "https://github.com/harshit-tiwari-codebase/VerifAi",
   },
   {
-    id: 4,
+    id: 3,
     name: "macos-dev-portfolio",
     description: "Interactive macOS-styled desktop developer portfolio built with React & Tailwind.",
     language: "JavaScript",
     stargazers_count: 0,
     forks_count: 0,
     html_url: "https://github.com/harshit-tiwari-codebase/macos-dev-portfolio",
+  },
+  {
+    id: 4,
+    name: "Nexora",
+    description: "Modern web application platform with a fluid, animated interface.",
+    language: "JavaScript",
+    stargazers_count: 0,
+    forks_count: 0,
+    html_url: "https://github.com/harshit-tiwari-codebase/Nexora",
   },
   {
     id: 5,
@@ -88,10 +89,24 @@ const GitHubWindow = ({
         );
         const data = response.data;
         if (Array.isArray(data) && data.length > 0) {
-          const featuredRepos = data
-            .filter((repo) => !repo.fork)
-            .sort((a, b) => b.stargazers_count - a.stargazers_count)
-            .slice(0, 6);
+          const ownedRepos = data.filter(
+            (repo) => !repo.fork && !HIDDEN_PROJECTS.has(repo.name.toLowerCase())
+          );
+          const reposWithPinnedFallbacks = [...ownedRepos];
+          for (const name of PINNED_PROJECTS) {
+            if (!reposWithPinnedFallbacks.some((repo) => repo.name.toLowerCase() === name)) {
+              const fallback = FALLBACK_FEATURED.find((repo) => repo.name.toLowerCase() === name);
+              if (fallback) reposWithPinnedFallbacks.push(fallback);
+            }
+          }
+          const featuredRepos = [
+            ...PINNED_PROJECTS
+              .map((name) => reposWithPinnedFallbacks.find((repo) => repo.name.toLowerCase() === name))
+              .filter(Boolean),
+            ...reposWithPinnedFallbacks
+              .filter((repo) => !PINNED_PROJECTS.includes(repo.name.toLowerCase()))
+              .sort((a, b) => b.stargazers_count - a.stargazers_count),
+          ].slice(0, 6);
           setRepos(featuredRepos.length > 0 ? featuredRepos : FALLBACK_FEATURED);
         } else {
           setRepos(FALLBACK_FEATURED);
@@ -110,6 +125,7 @@ const GitHubWindow = ({
   const openProjects = () => {
     setWindowState((prev) => ({ ...prev, projects: true }));
     if (setActiveWindow) setActiveWindow("projects");
+    window.dispatchEvent(new CustomEvent("portfolio:restore-window", { detail: "projects" }));
   };
 
   return (
@@ -123,140 +139,99 @@ const GitHubWindow = ({
       initialWidth={820}
       initialHeight={540}
     >
-      <div className="w-full h-full overflow-y-auto bg-[#0d1117] text-white p-3.5 sm:p-6">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+      <div className="h-full w-full overflow-y-auto bg-[#10141a] p-4 text-[#e9edf3] sm:p-6">
+        <header className="flex flex-wrap items-end justify-between gap-4 border-b border-[#2a313c] pb-5">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold flex items-center gap-3">
-              <FaGithub className="text-white" />
-              GitHub Workspace
-            </h1>
-            <p className="text-gray-400 text-sm mt-1">
-              Explore my development projects and GitHub activity.
-            </p>
+            <div className="mb-2 flex items-center gap-2 text-sm text-[#9ba6b4]">
+              <img src="/doc-icons/github.svg" alt="" className="h-4 w-4" />
+              <span>@{username}</span>
+              {loading && <LoaderCircle className="h-3.5 w-3.5 animate-spin" aria-label="Loading GitHub data" />}
+            </div>
+            <h1 className="text-2xl font-semibold tracking-[-0.035em] sm:text-3xl">GitHub Workspace</h1>
+            <p className="mt-1 text-sm text-[#9ba6b4]">Repositories and contribution activity.</p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <button
+              type="button"
               onClick={openProjects}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs sm:text-sm transition cursor-pointer shadow-lg shadow-blue-500/20"
+              className="flex items-center gap-2 rounded-lg bg-[#d5defd] px-3.5 py-2 text-sm font-semibold text-[#19233a] transition-colors hover:bg-[#bdcbff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a6b7ff]"
             >
-              <FolderGit2 className="w-4 h-4" />
-              <span>All Projects</span>
+              <img src="/doc-icons/projects.svg" alt="" className="h-5 w-5 brightness-0" />
+              All projects
             </button>
             <a
               href={`https://github.com/${username}`}
               target="_blank"
               rel="noreferrer"
-              className="px-4 py-2 rounded-xl bg-white/10 border border-white/10 hover:bg-white/20 text-xs sm:text-sm font-medium transition flex items-center gap-2"
+              className="flex items-center gap-2 rounded-lg border border-[#343d49] bg-[#1a2029] px-3.5 py-2 text-sm font-medium text-[#c8d0db] transition-colors hover:bg-[#252d38] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a6b7ff]"
             >
-              <span>Visit Profile</span>
-              <FaExternalLinkAlt className="text-xs" />
+              Visit profile
+              <FaExternalLinkAlt className="text-[10px]" />
             </a>
           </div>
-        </div>
+        </header>
 
-        {/* Contribution Calendar */}
-        <div className="bg-[#161b22] border border-[#30363d] rounded-2xl p-4 sm:p-5 mb-6">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-lg sm:text-xl font-semibold">
-              Contribution Activity
-            </h2>
-            <span className="text-xs text-gray-400">@{username}</span>
+        <section className="border-b border-[#2a313c] py-5">
+          <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
+            <h2 className="text-base font-semibold tracking-tight">Contribution activity</h2>
+            <span className="text-xs text-[#8793a2]">Public activity · @{username}</span>
           </div>
-
-          <div className="overflow-x-auto py-2">
-            <GitHubCalendar
-              username={username}
-              colorScheme="dark"
-              fontSize={12}
-              blockSize={12}
-            />
+          <div className="overflow-x-auto border border-[#2b333d] bg-[#151b24] px-3 py-4 sm:px-5">
+            <GitHubCalendar username={username} colorScheme="dark" fontSize={11} blockSize={11} />
           </div>
-        </div>
+        </section>
 
-        {/* Featured Repositories Header */}
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg sm:text-xl font-semibold flex items-center gap-2">
-            <span>Featured Repositories</span>
-          </h2>
-          <button
-            onClick={openProjects}
-            className="text-xs text-blue-400 hover:text-blue-300 font-medium transition"
-          >
-            View all repositories →
-          </button>
-        </div>
-
-        {/* Repository Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {(repos.length > 0 ? repos : FALLBACK_FEATURED).map((repo) => (
-            <div
-              key={repo.id}
-              className="bg-[#161b22] border border-[#30363d] rounded-2xl p-4 hover:border-blue-500 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+        <section className="pt-5">
+          <div className="mb-2 flex flex-wrap items-baseline justify-between gap-3">
+            <div>
+              <h2 className="text-base font-semibold tracking-tight">Featured repositories</h2>
+              <p className="mt-1 text-xs text-[#8793a2]">A selection from the public workspace.</p>
+            </div>
+            <button
+              type="button"
+              onClick={openProjects}
+              className="text-sm font-medium text-[#b8c7ff] transition-colors hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a6b7ff]"
             >
-              <div>
-                {/* Repo Title */}
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-base font-semibold truncate text-white" title={repo.name}>
-                    {repo.name}
-                  </h3>
-                  <FaGithub className="text-gray-400 shrink-0 text-sm" />
-                </div>
+              Browse all projects
+            </button>
+          </div>
 
-                {/* Description */}
-                <p className="text-gray-400 text-xs mb-3 line-clamp-2">
-                  {repo.description || "Interactive software project and codebase."}
-                </p>
-
-                {/* Language */}
-                <div className="mb-3">
-                  <span className="px-2.5 py-0.5 text-xs rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-medium">
-                    {repo.language || "JavaScript"}
-                  </span>
-                </div>
-              </div>
-
-              {/* Bottom stats and link */}
-              <div>
-                <div className="flex items-center gap-4 text-xs text-gray-400 mb-3 pt-2 border-t border-[#30363d]/60">
-                  <div className="flex items-center gap-1">
-                    <FaStar className="text-amber-400" />
-                    <span>{repo.stargazers_count ?? 0}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <FaCodeBranch />
-                    <span>{repo.forks_count ?? 0}</span>
-                  </div>
-                </div>
-
-                <div className="flex gap-2">
+          <div className="divide-y divide-[#2b333d] border-y border-[#2b333d]">
+            {(repos.length > 0 ? repos : FALLBACK_FEATURED).map((repo) => (
+              <article key={repo.id} className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between">
+                <div className="min-w-0">
                   <a
                     href={repo.html_url}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-medium transition"
+                    className="inline-flex max-w-full items-center gap-2 text-sm font-semibold text-[#b8c7ff] hover:underline"
                   >
-                    <FaGithub />
-                    Code
+                    <span className="truncate">{repo.name}</span>
+                    <FaExternalLinkAlt className="shrink-0 text-[9px]" />
                   </a>
+                  <p className="mt-1 max-w-3xl text-sm leading-relaxed text-[#a2adba]">
+                    {repo.description || "Interactive software project and codebase."}
+                  </p>
+                </div>
 
+                <div className="flex shrink-0 flex-wrap items-center gap-x-4 gap-y-2 text-xs text-[#9ba6b4]">
+                  <span className="flex items-center gap-1.5">
+                    <span className="h-2.5 w-2.5 rounded-full bg-[#e3c54a]" />
+                    {repo.language || "JavaScript"}
+                  </span>
+                  <span className="flex items-center gap-1.5"><FaStar className="text-[#d2b76f]" />{repo.stargazers_count ?? 0}</span>
+                  <span className="flex items-center gap-1.5"><FaCodeBranch />{repo.forks_count ?? 0}</span>
                   {repo.homepage && (
-                    <a
-                      href={repo.homepage}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-medium transition"
-                    >
-                      <FaExternalLinkAlt />
-                      Live
+                    <a href={repo.homepage} target="_blank" rel="noreferrer" className="font-medium text-[#b8c7ff] hover:underline">
+                      Live site
                     </a>
                   )}
                 </div>
-              </div>
-            </div>
-          ))}
-        </div>
+              </article>
+            ))}
+          </div>
+        </section>
       </div>
     </MacWindow>
   );
