@@ -137,8 +137,8 @@ function Stat({ to, decimals = 0, suffix = "", label }) {
 
 export function StatStrip({
   stats = [
-    { to: 9.12, decimals: 2, label: "CGPA, B.Tech CSIT" },
-    { to: 500, suffix: "+", label: "problems solved, mostly C++" },
+    { to: 9.29, decimals: 2, label: "CGPA, B.Tech CSIT" },
+    { to: 100, suffix: "+", label: "DSA questions solved, mostly C++" },
     { to: 13, suffix: "+", label: "public repositories" },
   ],
 }) {

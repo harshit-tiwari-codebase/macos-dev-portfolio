@@ -8,7 +8,7 @@ Your job is to answer questions from recruiters, fellow developers, and visitors
 === HARSHIT'S PROFILE & DETAILS ===
 - Full Name: Harshit Tiwari
 - Role: Full Stack Developer & CSIT (Computer Science & Information Technology) Student
-- College / Education: IPS IES Academy, 2nd Year (CGPA: 9.12)
+- College / Education: IPS IES Academy, 2nd Year (CGPA: 9.29)
 - Status: Learning • Building • Improving
 - Goals: Become a top software engineer, master full stack engineering, crack top product-based companies, and build impactful real-world software.
 
@@ -36,7 +36,7 @@ Your job is to answer questions from recruiters, fellow developers, and visitors
 - Support both English and Hinglish naturally depending on the user's language.
 - Format responses nicely using Markdown (bolding, lists, code blocks if asked).
 - If the user asks how to see projects or resume, mention that they can click the Dock icons or ask you, and highlight that you can guide them.
-- Be polite, humble yet confident, and highlight Harshit's strong work ethic and academic excellence (9.12 CGPA).
+- Be polite, humble yet confident, and highlight Harshit's strong work ethic and academic excellence (9.29 CGPA).
 `;
 
 // Smart offline fallback logic if no API key is provided
@@ -60,12 +60,12 @@ function getOfflineFallbackResponse(userMessage) {
 * **Backend:** Node.js, Express, REST APIs
 * **Database:** MongoDB
 * **Core CS & Tools:** Data Structures & Algorithms (DSA), Git & GitHub, Postman
-* **Academics:** 9.12 CGPA in CSIT at IPS IES Academy (2nd Year)`;
+* **Academics:** 9.29 CGPA in CSIT at IPS IES Academy (2nd Year)`;
   }
 
   if (/resume|cv|biodata/i.test(query)) {
     return `### 📄 Harshit's Resume:
-Harshit is a 2nd year CSIT student at **IPS IES Academy** with a **9.12 CGPA** and strong hands-on full-stack development expertise.
+Harshit is a 2nd year CSIT student at **IPS IES Academy** with a **9.29 CGPA** and strong hands-on full-stack development expertise.
 
 You can view or download his full PDF resume directly from the **Resume** icon in the dock!`;
   }
@@ -82,7 +82,7 @@ You can also use the **Mail** app on the desktop to send him a direct message!`;
 
   if (/who|about|education|college|harshit/i.test(query)) {
     return `### 👋 Meet Harshit Tiwari!
-Harshit is a passionate **Full Stack Developer & 2nd Year CSIT Student** at **IPS IES Academy** (maintaining a top **9.12 CGPA**).
+Harshit is a passionate **Full Stack Developer & 2nd Year CSIT Student** at **IPS IES Academy** (maintaining a top **9.29 CGPA**).
 
 He specializes in modern React ecosystems, scalable web applications, and problem-solving through DSA. His goal is to build impactful production software and excel in top product-driven engineering teams.`;
   }
@@ -92,7 +92,7 @@ He specializes in modern React ecosystems, scalable web applications, and proble
 I can tell you all about Harshit's:
 - 🚀 **Projects** (VerifAi, Nexora, macOS Portfolio)
 - 🛠️ **Tech Skills** (React, TypeScript, Node.js, DSA)
-- 🎓 **Education & CGPA** (IPS IES Academy · 9.12 CGPA)
+- 🎓 **Education & CGPA** (IPS IES Academy · 9.29 CGPA)
 - 📬 **Contact & Hiring Details**
 
 What would you like to know?`;

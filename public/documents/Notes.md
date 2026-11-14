@@ -7,7 +7,7 @@ const developer = {
   education: {
     college: "IPS IES Academy",
     year: "2nd Year",
-    cgpa: 9.12,
+    cgpa: 9.29,
   },
 
   skills: [

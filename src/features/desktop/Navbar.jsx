@@ -348,7 +348,7 @@ const Navbar = ({
               </div>
               <div className="flex justify-between gap-4 px-3.5 py-2.5">
                 <dt className="text-white/50">CGPA</dt>
-                <dd className="font-medium text-[#6fdca0]">9.12</dd>
+                <dd className="font-medium text-[#6fdca0]">9.29</dd>
               </div>
               <div className="flex justify-between gap-4 px-3.5 py-2.5">
                 <dt className="shrink-0 text-white/50">Core Stack</dt>

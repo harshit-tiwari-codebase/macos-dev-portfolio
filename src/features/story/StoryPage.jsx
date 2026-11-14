@@ -673,7 +673,7 @@ export default function StoryPage({ onClose, onOpenWindow }) {
                     { h: "Fundamentals first", p: "I study Computer Science and IT at IPS Academy, Institute of Engineering & Science, in Indore. Coursework centres on data structures, OOP, operating systems, databases and networks." },
                     { h: "Backends that keep up", p: "In VerifAI, Redis and BullMQ take heavy work off the request path and Socket.io streams progress back. In my MongoDB projects I tune aggregations and indexes so queries stay fast." },
                     { h: "AI where it earns its place", p: "VerifAI runs submitted code in Judge0 sandboxes, then hands the results to Gemini and Groq for a structured review." },
-                    { h: "Daily practice", p: "I’ve solved more than 500 problems on LeetCode (vision0808), GeeksforGeeks and HackerRank. That habit shapes how I reason about time, space and recursion in production code." },
+                    { h: "Daily practice", p: "I’ve solved more than 100 DSA questions across LeetCode (vision0808), GeeksforGeeks and HackerRank. That habit shapes how I reason about time, space and recursion in production code." },
                   ].map((a, i) => (
                     <article key={a.h} className={`py-8 ${i === 0 ? "" : "border-t border-[var(--sp-rule)]"} ${i === 0 ? "pt-0" : ""}`}>
                       <h3 className="sp-display text-2xl font-semibold">{a.h}</h3>

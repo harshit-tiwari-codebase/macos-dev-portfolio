@@ -60,7 +60,7 @@ Available commands:
     },
 
     education: {
-      fn: () => "IPS IES Academy | 2nd Year B.Tech (CSIT) | CGPA: 9.12",
+      fn: () => "IPS IES Academy | 2nd Year B.Tech (CSIT) | CGPA: 9.29",
     },
 
     projects: {
