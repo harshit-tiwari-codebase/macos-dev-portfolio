@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#F0F0F0"/>
+    </linearGradient>
+    <linearGradient id="redStrip" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FF3B30"/>
+      <stop offset="100%" stop-color="#E0312B"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Calendar body – white squircle -->
+  <rect x="28" y="28" width="456" height="456" rx="108" fill="url(#bg)"/>
+  <!-- Outer border -->
+  <rect x="30" y="30" width="452" height="452" rx="106" fill="none" stroke="#D1D1D6" stroke-width="2"/>
+
+  <!-- Red top strip (month bar) -->
+  <clipPath id="topClip">
+    <rect x="28" y="28" width="456" height="100" rx="108" ry="108"/>
+  </clipPath>
+  <rect x="28" y="28" width="456" height="100" fill="url(#redStrip)" clip-path="url(#topClip)"/>
+  <!-- Clean red block below the rounded top -->
+  <rect x="28" y="86" width="456" height="42" fill="url(#redStrip)"/>
+
+  <!-- Month text -->
+  <text x="256" y="112" text-anchor="middle" font-family="SF Pro Display, -apple-system, BlinkMacSystemFont, Helvetica Neue, Arial, sans-serif"
+    font-size="38" font-weight="600" letter-spacing="2" fill="white" opacity="0.95">
+    NOVEMBER
+  </text>
+
+  <!-- Day number -->
+  <text x="256" y="340" text-anchor="middle" font-family="SF Pro Display, -apple-system, BlinkMacSystemFont, Helvetica Neue, Arial, sans-serif"
+    font-size="200" font-weight="300" letter-spacing="-8" fill="#1C1C1E">
+    14
+  </text>
+
+  <!-- Day of week -->
+  <text x="256" y="410" text-anchor="middle" font-family="SF Pro Display, -apple-system, BlinkMacSystemFont, Helvetica Neue, Arial, sans-serif"
+    font-size="40" font-weight="500" fill="#8E8E93" letter-spacing="1">
+    Friday
+  </text>
+
+  <!-- Subtle event dot -->
+  <circle cx="256" cy="440" r="5" fill="#FF3B30" opacity="0.7"/>
+</svg>

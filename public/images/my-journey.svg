@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- App icon squircle background gradient: deep indigo → purple → violet -->
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#3B2FCC"/>
+      <stop offset="50%"  stop-color="#5B34E8"/>
+      <stop offset="100%" stop-color="#7B3FF2"/>
+    </linearGradient>
+
+    <!-- Compass face gradient -->
+    <radialGradient id="faceGrad" cx="50%" cy="38%" r="58%">
+      <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.03"/>
+    </radialGradient>
+
+    <!-- North needle gradient (red) -->
+    <linearGradient id="needleN" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#FF4E50"/>
+      <stop offset="100%" stop-color="#C9000A"/>
+    </linearGradient>
+
+    <!-- South needle gradient (white/silver) -->
+    <linearGradient id="needleS" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#E8EDF5"/>
+      <stop offset="100%" stop-color="#B0B8C8"/>
+    </linearGradient>
+
+    <!-- Inner bezel gradient -->
+    <radialGradient id="bezelGrad" cx="40%" cy="30%" r="65%">
+      <stop offset="0%"   stop-color="#6A5AE0"/>
+      <stop offset="100%" stop-color="#3A2AB8"/>
+    </radialGradient>
+
+    <!-- Glass sheen on icon -->
+    <linearGradient id="sheen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.22"/>
+      <stop offset="55%"  stop-color="#ffffff" stop-opacity="0.0"/>
+    </linearGradient>
+
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#000" flood-opacity="0.45"/>
+    </filter>
+    <filter id="needleShadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- ── Squircle background ── -->
+  <rect x="0" y="0" width="512" height="512" rx="116" ry="116" fill="url(#bgGrad)"/>
+
+  <!-- ── Compass outer ring / bezel ── -->
+  <circle cx="256" cy="256" r="188" fill="none"
+    stroke="rgba(255,255,255,0.22)" stroke-width="3"/>
+  <circle cx="256" cy="256" r="183" fill="url(#bezelGrad)"/>
+  <circle cx="256" cy="256" r="180" fill="none"
+    stroke="rgba(255,255,255,0.14)" stroke-width="1.5"/>
+
+  <!-- ── Compass face ── -->
+  <circle cx="256" cy="256" r="174" fill="url(#faceGrad)"/>
+
+  <!-- ── Tick marks (8 cardinal + intercardinal) ── -->
+  <g stroke="rgba(255,255,255,0.55)" stroke-linecap="round">
+    <!-- N,E,S,W (longer) -->
+    <line x1="256" y1="88"  x2="256" y2="106" stroke-width="4"/>
+    <line x1="424" y1="256" x2="406" y2="256" stroke-width="4"/>
+    <line x1="256" y1="424" x2="256" y2="406" stroke-width="4"/>
+    <line x1="88"  y1="256" x2="106" y2="256" stroke-width="4"/>
+    <!-- NE,SE,SW,NW (shorter) -->
+    <line x1="377" y1="135" x2="366" y2="147" stroke-width="2.5"/>
+    <line x1="377" y1="377" x2="366" y2="365" stroke-width="2.5"/>
+    <line x1="135" y1="377" x2="147" y2="365" stroke-width="2.5"/>
+    <line x1="135" y1="135" x2="147" y2="147" stroke-width="2.5"/>
+  </g>
+
+  <!-- ── Cardinal letters ── -->
+  <g font-family="-apple-system, SF Pro Display, Helvetica Neue, sans-serif"
+     font-weight="700" text-anchor="middle" dominant-baseline="central">
+    <text x="256" y="122" font-size="34" fill="#FF4E50">N</text>
+    <text x="256" y="393" font-size="28" fill="rgba(255,255,255,0.65)">S</text>
+    <text x="122" y="258" font-size="28" fill="rgba(255,255,255,0.65)">W</text>
+    <text x="392" y="258" font-size="28" fill="rgba(255,255,255,0.65)">E</text>
+  </g>
+
+  <!-- ── Compass needle (rotated ~15° for dynamic look) ── -->
+  <g transform="rotate(-15, 256, 256)" filter="url(#needleShadow)">
+    <!-- North half (red) -->
+    <polygon points="256,112 243,256 256,270 269,256"
+      fill="url(#needleN)"/>
+    <!-- South half (silver) -->
+    <polygon points="256,400 243,256 256,242 269,256"
+      fill="url(#needleS)"/>
+  </g>
+
+  <!-- ── Center hub ── -->
+  <circle cx="256" cy="256" r="14" fill="#1a1240"
+    stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+  <circle cx="256" cy="256" r="6" fill="rgba(255,255,255,0.9)"/>
+
+  <!-- ── Top glass sheen overlay ── -->
+  <rect x="0" y="0" width="512" height="512" rx="116" ry="116"
+    fill="url(#sheen)" pointer-events="none"/>
+
+  <!-- ── Inner rim highlight ── -->
+  <rect x="0" y="0" width="512" height="512" rx="116" ry="116"
+    fill="none"
+    stroke="rgba(255,255,255,0.28)" stroke-width="1.5"
+    pointer-events="none"/>
+</svg>

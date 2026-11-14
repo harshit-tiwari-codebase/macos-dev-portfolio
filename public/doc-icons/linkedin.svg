@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0A66C2"/>
+      <stop offset="100%" stop-color="#004182"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background squircle -->
+  <rect x="28" y="28" width="456" height="456" rx="108" fill="url(#bg)"/>
+  <rect x="30" y="30" width="452" height="452" rx="106" fill="none" stroke="white" stroke-opacity="0.2" stroke-width="2"/>
+
+  <!-- LinkedIn "in" logo – pixel-accurate recreation -->
+  <g fill="white">
+    <!-- "i" dot -->
+    <circle cx="172" cy="172" r="28"/>
+    <!-- "i" body -->
+    <rect x="148" y="218" width="48" height="148" rx="4"/>
+    <!-- "n" shape -->
+    <path d="M240 218 h44 v22 c0 0 12-26 52-26 c46 0 60 30 60 70 v82 h-48 V296 c0-18-4-38-30-38 c-28 0-34 22-34 38 v70 h-44 z"/>
+  </g>
+</svg>

@@ -3,7 +3,7 @@ import { initReactI18next } from "react-i18next";
 
 const resources = {
   en: { translation: {
-    projects: "Projects", github: "GitHub", spotify: "Spotify", notes: "Notes", resume: "Resume", terminal: "Terminal",
+    projects: "Projects", github: "GitHub", spotify: "Vision Music", music: "Vision Music", notes: "Notes", resume: "Resume", terminal: "Terminal", calendar: "Calendar",
     available: "Available for hire", search: "Search", wallpaper: "Control Center & Wallpapers", language: "Language",
     stats: "GitHub Stats", achievements: "Achievements", contact: "Contact", blog: "Blog & Articles", skillsMap: "Skills Map",
     askAi: "Ask Harshit AI", soon: "Coming Soon", certificates: "Certificates", viewCertificate: "View certificate",
@@ -12,7 +12,7 @@ const resources = {
     trophyCase: "Trophy Case", verifiedAwards: "Verified from the resume and the certificate provided.", articles: "Articles & notes", writingBy: "Writing by",
   } },
   hi: { translation: {
-    projects: "प्रोजेक्ट", github: "गिटहब", spotify: "स्पॉटिफ़ाई", notes: "नोट्स", resume: "रिज़्यूमे", terminal: "टर्मिनल",
+    projects: "प्रोजेक्ट", github: "गिटहब", spotify: "विज़न म्यूजिक", music: "विज़न म्यूजिक", notes: "नोट्स", resume: "रिज़्यूमे", terminal: "टर्मिनल", calendar: "कैलेंडर",
     available: "काम के लिए उपलब्ध", search: "खोजें", wallpaper: "कंट्रोल सेंटर और वॉलपेपर", language: "भाषा",
     stats: "गिटहब आँकड़े", achievements: "उपलब्धियाँ", contact: "संपर्क", blog: "ब्लॉग और लेख", skillsMap: "स्किल मैप",
     askAi: "हरषित AI से पूछें", soon: "जल्द आ रहा है", certificates: "प्रमाणपत्र", viewCertificate: "प्रमाणपत्र देखें",

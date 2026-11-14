@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — Page Not Found</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #12161D;
+      --blue: #2B3EF2;
+      --fog: #EDEFF2;
+      --slate: #5B6573;
+      --rule: #D0D4DC;
+      --bg: #0e131b;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--fog);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Subtle grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(43,62,242,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(43,62,242,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    /* Glow blob */
+    .glow {
+      position: fixed;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(43,62,242,0.12) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      animation: pulse 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+      50%       { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+    }
+
+    /* macOS window chrome */
+    .window {
+      position: relative;
+      z-index: 10;
+      width: min(520px, 92vw);
+      border-radius: 12px;
+      background: rgba(18, 22, 29, 0.85);
+      backdrop-filter: blur(24px) saturate(1.4);
+      -webkit-backdrop-filter: blur(24px) saturate(1.4);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow:
+        0 2px 0 rgba(255,255,255,0.05) inset,
+        0 40px 100px rgba(0,0,0,0.6),
+        0 0 0 1px rgba(43,62,242,0.1);
+      overflow: hidden;
+      animation: slideUp 0.6s cubic-bezier(0.16,1,0.3,1) both;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Title bar */
+    .titlebar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot.red    { background: #FF5F57; }
+    .dot.yellow { background: #FEBC2E; }
+    .dot.green  { background: #28C840; }
+
+    .titlebar-label {
+      flex: 1;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.02em;
+      margin-right: 36px; /* optical center after dots */
+    }
+
+    /* Body */
+    .body {
+      padding: 40px 36px 36px;
+      text-align: center;
+    }
+
+    .error-code {
+      font-size: 80px;
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      background: linear-gradient(135deg, var(--blue) 0%, #8793F8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+      animation: glowText 3s ease-in-out infinite;
+    }
+
+    @keyframes glowText {
+      0%, 100% { filter: drop-shadow(0 0 12px rgba(43,62,242,0.3)); }
+      50%       { filter: drop-shadow(0 0 24px rgba(43,62,242,0.6)); }
+    }
+
+    .title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--fog);
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--slate);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    /* Progress bar */
+    .progress-wrap {
+      width: 100%;
+      height: 2px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--blue), #8793F8);
+      border-radius: 999px;
+      width: 0%;
+      animation: fillBar 4s linear forwards;
+    }
+
+    @keyframes fillBar {
+      from { width: 0%; }
+      to   { width: 100%; }
+    }
+
+    .redirect-text {
+      font-size: 12px;
+      color: var(--slate);
+      margin-bottom: 28px;
+    }
+
+    .redirect-text span {
+      color: var(--blue);
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Button */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: 8px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: inherit;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 4px 16px rgba(43,62,242,0.35);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(43,62,242,0.5);
+    }
+
+    .btn:active { transform: translateY(0); }
+
+    /* Divider */
+    .divider {
+      width: 48px;
+      height: 1px;
+      background: rgba(255,255,255,0.1);
+      margin: 24px auto 0;
+    }
+
+    .footer {
+      margin-top: 20px;
+      font-size: 11px;
+      color: rgba(91,101,115,0.7);
+      letter-spacing: 0.04em;
+    }
+  </style>
+</head>
+<body>
+  <div class="glow"></div>
+
+  <div class="window" role="main">
+    <!-- macOS title bar -->
+    <div class="titlebar" aria-hidden="true">
+      <div class="dot red"></div>
+      <div class="dot yellow"></div>
+      <div class="dot green"></div>
+      <div class="titlebar-label">harshit.dev — Not Found</div>
+    </div>
+
+    <!-- Content -->
+    <div class="body">
+      <div class="error-code" aria-label="Error 404">404</div>
+      <h1 class="title">Oops, page not found</h1>
+      <p class="subtitle">
+        The page you're looking for doesn't live here.<br />
+        You'll be redirected to the desktop shortly.
+      </p>
+
+      <div class="progress-wrap" role="progressbar" aria-label="Redirecting…" aria-valuenow="0" aria-valuemax="100">
+        <div class="progress-bar" id="bar"></div>
+      </div>
+      <p class="redirect-text">Redirecting in <span id="count">4</span>s…</p>
+
+      <a href="/" class="btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        Return to Desktop
+      </a>
+
+      <div class="divider"></div>
+      <p class="footer">HARSHIT TIWARI — PORTFOLIO</p>
+    </div>
+  </div>
+
+  <script>
+    // Countdown + redirect
+    let t = 4;
+    const el = document.getElementById('count');
+    const timer = setInterval(() => {
+      t--;
+      if (el) el.textContent = t;
+      if (t <= 0) { clearInterval(timer); window.location.href = '/'; }
+    }, 1000);
+  </script>
+</body>
+</html>

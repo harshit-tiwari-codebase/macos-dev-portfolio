@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Deep premium background gradient -->
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4F46E5"/>
+      <stop offset="50%" stop-color="#6D28D9"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+    <!-- Inner glow overlay -->
+    <radialGradient id="glow" cx="50%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#A78BFA" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#4F46E5" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Orb gradient (AI brain) -->
+    <radialGradient id="orb" cx="50%" cy="42%" r="42%">
+      <stop offset="0%" stop-color="#C4B5FD"/>
+      <stop offset="45%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#5B21B6"/>
+    </radialGradient>
+    <!-- Outer ring shimmer -->
+    <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#E0E7FF" stop-opacity="0.9"/>
+      <stop offset="50%" stop-color="#A5B4FC" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#E0E7FF" stop-opacity="0.9"/>
+    </linearGradient>
+    <!-- Sparkle gradient -->
+    <linearGradient id="spark" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#C7D2FE"/>
+    </linearGradient>
+    <!-- Bottom text gradient -->
+    <linearGradient id="textGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#E0E7FF"/>
+      <stop offset="100%" stop-color="#C4B5FD"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background squircle with premium depth -->
+  <rect x="28" y="28" width="456" height="456" rx="108" fill="url(#bg)"/>
+  <!-- Inner ambient glow -->
+  <rect x="28" y="28" width="456" height="456" rx="108" fill="url(#glow)"/>
+  <!-- Subtle border rim -->
+  <rect x="30" y="30" width="452" height="452" rx="106" fill="none" stroke="url(#ring)" stroke-width="2.5"/>
+  <!-- Top specular highlight -->
+  <rect x="60" y="32" width="392" height="120" rx="60" fill="white" opacity="0.06"/>
+
+  <!-- Outer orbit ring -->
+  <circle cx="256" cy="230" r="130" fill="none" stroke="white" stroke-opacity="0.12" stroke-width="2"/>
+  <circle cx="256" cy="230" r="108" fill="none" stroke="white" stroke-opacity="0.08" stroke-width="1.5"/>
+
+  <!-- Central AI orb -->
+  <circle cx="256" cy="230" r="82" fill="url(#orb)"/>
+  <!-- Orb inner sheen -->
+  <ellipse cx="256" cy="208" rx="52" ry="36" fill="white" opacity="0.15"/>
+  <!-- Orb rim glow -->
+  <circle cx="256" cy="230" r="82" fill="none" stroke="#C4B5FD" stroke-opacity="0.5" stroke-width="2"/>
+
+  <!-- Neural / AI sparkle star (4-point) – top -->
+  <g transform="translate(256,230)">
+    <!-- Vertical beam -->
+    <rect x="-3" y="-46" width="6" height="92" rx="3" fill="url(#spark)" opacity="0.95"/>
+    <!-- Horizontal beam -->
+    <rect x="-46" y="-3" width="92" height="6" rx="3" fill="url(#spark)" opacity="0.95"/>
+    <!-- Diagonal beams (45°) -->
+    <rect x="-2.5" y="-32" width="5" height="64" rx="2.5" fill="white" opacity="0.5" transform="rotate(45)"/>
+    <rect x="-2.5" y="-32" width="5" height="64" rx="2.5" fill="white" opacity="0.5" transform="rotate(-45)"/>
+    <!-- Core dot -->
+    <circle cx="0" cy="0" r="8" fill="white" opacity="0.9"/>
+    <circle cx="0" cy="0" r="4" fill="white"/>
+  </g>
+
+  <!-- Floating orbit dots (satellites) -->
+  <circle cx="152" cy="170" r="6" fill="#A5B4FC" opacity="0.8"/>
+  <circle cx="360" cy="175" r="5" fill="#C4B5FD" opacity="0.7"/>
+  <circle cx="172" cy="300" r="4.5" fill="#818CF8" opacity="0.65"/>
+  <circle cx="348" cy="296" r="5.5" fill="#A78BFA" opacity="0.75"/>
+  <circle cx="256" cy="340" r="4" fill="#DDD6FE" opacity="0.6"/>
+
+  <!-- Thin connecting arcs (neural paths) -->
+  <path d="M152 170 Q200 135 256 148" fill="none" stroke="#A5B4FC" stroke-opacity="0.3" stroke-width="1.5"/>
+  <path d="M360 175 Q310 140 256 148" fill="none" stroke="#C4B5FD" stroke-opacity="0.3" stroke-width="1.5"/>
+  <path d="M172 300 Q200 325 256 312" fill="none" stroke="#818CF8" stroke-opacity="0.25" stroke-width="1.5"/>
+  <path d="M348 296 Q310 320 256 312" fill="none" stroke="#A78BFA" stroke-opacity="0.25" stroke-width="1.5"/>
+
+  <!-- "AI" text label at bottom -->
+  <text x="256" y="420" text-anchor="middle" font-family="SF Pro Display, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="52" font-weight="700" letter-spacing="8" fill="url(#textGrad)">AI</text>
+  <!-- Subtle underline accent -->
+  <rect x="210" y="434" width="92" height="2.5" rx="1.25" fill="#A5B4FC" opacity="0.4"/>
+</svg>
